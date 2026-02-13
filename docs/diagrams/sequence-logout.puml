@@ -1,0 +1,85 @@
+@startuml sequence-logout
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam sequenceParticipant underline
+
+title Flux de Déconnexion (Logout) — Pattern BFF avec Keycloak
+
+actor "Utilisateur" as User
+participant "Angular\n(Frontend)\nPort 4200" as FE #LightBlue
+participant "Popup\nNavigateur" as Popup #LightYellow
+participant "Express.js\n(BFF)\nPort 3000" as BFF #LightGreen
+participant "Keycloak\n(IdP)\nPort 8443" as KC #Orange
+database "Redis\n(Sessions)" as Redis #LightCoral
+
+== 1. Initiation du Logout ==
+
+User -> FE : Clic sur "Logout"
+activate FE
+FE -> FE : AuthService.logout()
+FE -> Popup : window.open(\n  "/auth/logout",\n  "kcLogoutPopup"\n)
+FE -> FE : Enregistre listener\npostMessage("LOGOUT_SUCCESS")
+deactivate FE
+
+== 2. Déconnexion locale + SSO Keycloak ==
+
+activate Popup
+Popup -> BFF : GET /auth/logout\n(Cookie: angular-session=...)
+activate BFF
+BFF -> BFF : req.isAuthenticated() → true
+BFF -> BFF : Récupère id_token\ndepuis la session utilisateur
+BFF -> BFF : Construit logoutUrl :\n/realms/{realm}/protocol/\nopenid-connect/logout\n?id_token_hint={id_token}\n&post_logout_redirect_uri=\n{BFF_LOGOUT_CALLBACK_URL}
+BFF --> Popup : HTML/JS redirect\n→ logoutUrl Keycloak
+deactivate BFF
+
+== 3. Logout SSO Keycloak ==
+
+Popup -> KC : GET /realms/{realm}/protocol/\nopenid-connect/logout\n?id_token_hint=...\n&post_logout_redirect_uri=...
+activate KC
+KC -> KC : Invalide la session SSO\nKeycloak pour l'utilisateur
+KC --> Popup : 302 Redirect →\n/auth/logout/callback
+deactivate KC
+
+== 4. Destruction de la session BFF ==
+
+Popup -> BFF : GET /auth/logout/callback
+activate BFF
+BFF -> BFF : req.logout()\n(Passport.js déconnexion)
+BFF -> BFF : req.session.destroy()
+BFF -> Redis : DEL session:{sessionId}
+Redis --> BFF : OK
+BFF -> BFF : res.clearCookie('angular-session')
+BFF --> Popup : HTML/JS :\nwindow.opener.postMessage(\n  {type: 'LOGOUT_SUCCESS',\n   reason: 'KEYCLOAK_LOGOUT_DONE'}\n);\nwindow.close();
+deactivate BFF
+
+== 5. Finalisation côté Frontend ==
+
+Popup --> FE : postMessage("LOGOUT_SUCCESS")
+deactivate Popup
+activate FE
+FE -> FE : AuthService.markLoggedOut()\nisLoggedIn = false\nauthStateChanged.next()
+FE -> FE : Affiche Toastr "Logged out"\nFerme la popup
+FE -> FE : NavbarComponent reconstruit\nles items de navigation\n(cache les pages protégées)
+deactivate FE
+
+== Cas alternatif : Pas de id_token ==
+
+note over BFF
+  Si aucun id_token n'est disponible en session,
+  le BFF effectue uniquement la déconnexion locale
+  (session destroy + clear cookie) sans rediriger
+  vers Keycloak. Message : "NO_ID_TOKEN"
+end note
+
+== Cas alternatif : Utilisateur non authentifié ==
+
+note over BFF
+  Si req.isAuthenticated() === false,
+  le BFF renvoie directement le snippet
+  postMessage({type: 'LOGOUT_SUCCESS',
+  reason: 'NOT_LOGGED_IN'})
+end note
+
+@enduml

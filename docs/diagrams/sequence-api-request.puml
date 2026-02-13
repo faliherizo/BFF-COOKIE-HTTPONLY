@@ -1,0 +1,105 @@
+@startuml sequence-api-request
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam sequenceParticipant underline
+
+title Requête API Protégée — Pattern BFF
+
+actor "Utilisateur" as User
+participant "Angular\n(Frontend)\nPort 4200" as FE #LightBlue
+participant "Express.js\n(BFF)\nPort 3000" as BFF #LightGreen
+database "Redis\n(Sessions)" as Redis #LightCoral
+
+== Scénario 1 : Utilisateur authentifié — Succès ==
+
+User -> FE : Navigue vers /profile
+activate FE
+FE -> FE : authGuard vérifie\nAuthService.isAuthenticated()\n→ true
+FE -> FE : ProfileComponent.ngOnInit()\nfetchProfile()
+
+FE -> BFF : GET /api/profile\n(Cookie: angular-session=xxx)\n[WithCredentialsInterceptor\najoute withCredentials: true]
+activate BFF
+BFF -> BFF : express-session middleware\nLit le cookie "angular-session"
+BFF -> Redis : GET session:{sessionId}
+Redis --> BFF : Session data\n{user, tokens, ...}
+BFF -> BFF : passport.session()\nDésérialise l'utilisateur
+BFF -> BFF : isAuthenticated()\n→ req.isAuthenticated() = true
+BFF --> FE : 200 OK\n{ user: { id, displayName,\n  username, emails, _json } }
+deactivate BFF
+
+FE -> FE : Mappe KeycloakUser → UserProfile\nMet à jour profileForm
+FE --> User : Affiche le profil
+deactivate FE
+
+== Scénario 2 : Utilisateur non authentifié — Rejet ==
+
+User -> FE : Navigue vers /products\n(pas connecté)
+activate FE
+FE -> FE : authGuard vérifie\nAuthService.isAuthenticated()\n→ false
+
+alt Guard bloque la navigation
+  FE -> FE : Affiche SnackBar\n"You must be logged in"
+  FE -> FE : router.navigate(['/home'])
+  FE --> User : Redirigé vers Home
+else Requête directe sans guard (fallback backend)
+  FE -> BFF : GET /api/products\n(Pas de cookie de session valide)
+  activate BFF
+  BFF -> BFF : isAuthenticated()\n→ req.isAuthenticated() = false
+  BFF --> FE : 401 Unauthorized
+  deactivate BFF
+  FE -> FE : Gestion d'erreur\n(GlobalErrorHandler / Toastr)
+  FE --> User : Message d'erreur
+end
+deactivate FE
+
+== Scénario 3 : Récupération des Transactions ==
+
+User -> FE : Navigue vers /transactions
+activate FE
+FE -> FE : authGuard → true
+FE -> FE : TransactionsComponent.ngOnInit()
+
+FE -> BFF : GET /api/transactions\n(Cookie: angular-session=xxx)
+activate BFF
+BFF -> Redis : GET session:{sessionId}
+Redis --> BFF : Session data
+BFF -> BFF : isAuthenticated() → true
+BFF -> BFF : MockDataService.getTransactions()\nGénère données Faker.js
+BFF --> FE : 200 OK\n{ transactions: [\n  {id, date, amount, currency,\n   merchant, type}, ...\n]}
+deactivate BFF
+
+FE -> FE : Affiche la liste\ndes transactions
+FE --> User : Transactions affichées
+deactivate FE
+
+== Scénario 4 : Récupération des Produits ==
+
+User -> FE : Navigue vers /products
+activate FE
+FE -> FE : authGuard → true
+FE -> FE : ProductListComponent.ngOnInit()
+
+FE -> BFF : GET /api/products\n(Cookie: angular-session=xxx)
+activate BFF
+BFF -> Redis : GET session:{sessionId}
+Redis --> BFF : Session data
+BFF -> BFF : isAuthenticated() → true
+BFF -> BFF : MockDataService.getProducts(6)\nGénère données Faker.js
+BFF --> FE : 200 OK\n{ products: [\n  {id, name, price, department,\n   material, description, inStock},\n  ...\n]}
+deactivate BFF
+
+FE -> FE : Affiche la liste\ndes produits
+FE --> User : Produits affichés
+deactivate FE
+
+note right of BFF
+  **Isolation des tokens** :
+  Le BFF utilise les tokens OAuth2 stockés
+  en session pour toute communication
+  avec des APIs externes. Le frontend
+  ne voit que le cookie de session.
+end note
+
+@enduml

@@ -1,0 +1,86 @@
+@startuml sequence-session-check
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam sequenceParticipant underline
+
+title Vérification de Session au Démarrage de l'Application
+
+actor "Utilisateur" as User
+participant "Angular\n(Frontend)\nPort 4200" as FE #LightBlue
+participant "Express.js\n(BFF)\nPort 3000" as BFF #LightGreen
+database "Redis\n(Sessions)" as Redis #LightCoral
+
+== 1. Chargement de l'application ==
+
+User -> FE : Accède à https://frontend.local.com:4200
+activate FE
+FE -> FE : bootstrapApplication()\n→ Initialise providers,\n  routes, interceptors
+FE -> FE : AppComponent instancié\n→ Navbar + RouterOutlet + Footer
+FE -> FE : NavbarComponent.constructor()\n→ Souscrit à authStateChanged\n→ buildNavItems()
+
+== 2. Vérification automatique de la session ==
+
+FE -> FE : AuthService.constructor()\n→ refreshSessionStatus()
+
+FE -> BFF : GET /api/profile\n(Cookie: angular-session=xxx)\n[withCredentials: true]
+activate BFF
+
+alt Session valide (cookie + session Redis existante)
+  BFF -> Redis : GET session:{sessionId}
+  Redis --> BFF : Session data\n{user, tokens}
+  BFF -> BFF : passport.deserializeUser()\nisAuthenticated() → true
+  BFF --> FE : 200 OK\n{ user: {...} }
+  deactivate BFF
+  FE -> FE : isLoggedIn = true\nauthStateChanged.next()
+  FE -> FE : NavbarComponent\nreconstruit les items\n→ Affiche Profile, Products,\n  Transactions, Logout
+  
+else Session invalide (pas de cookie ou session expirée)
+  BFF -> Redis : GET session:{sessionId}
+  Redis --> BFF : null (session expirée\nou inexistante)
+  BFF -> BFF : isAuthenticated() → false
+  BFF --> FE : 401 Unauthorized
+  deactivate BFF
+  FE -> FE : isLoggedIn = false\nauthStateChanged.next()
+  FE -> FE : NavbarComponent\nreconstruit les items\n→ Affiche Home, Login
+end
+
+FE -> FE : Routage initial\n→ /home (redirect par défaut)
+FE --> User : Application chargée\n(état auth reflété dans la navbar)
+deactivate FE
+
+== 3. Gestion du TTL de session (Rolling) ==
+
+note over BFF, Redis
+  **Session Rolling** : Chaque requête authentifiée
+  renouvelle le TTL du cookie (maxAge: 15 minutes).
+  L'option `rolling: true` dans express-session
+  garantit que les sessions actives ne expirent pas
+  tant que l'utilisateur interagit régulièrement.
+end note
+
+== 4. Gestion des sessions (API publique) ==
+
+FE -> BFF : GET /api/sessions
+activate BFF
+BFF -> Redis : KEYS sess:*
+Redis --> BFF : Liste des clés de session
+BFF --> FE : 200 OK\n{ sessions: [...] }
+deactivate BFF
+
+FE -> BFF : POST /api/sessions/{id}/refresh\n{ newTTL: 1800 }
+activate BFF
+BFF -> Redis : EXPIRE session:{id} 1800
+Redis --> BFF : OK
+BFF --> FE : 200 OK\n{ message: "Session refreshed" }
+deactivate BFF
+
+FE -> BFF : DELETE /api/sessions/{id}
+activate BFF
+BFF -> Redis : DEL session:{id}
+Redis --> BFF : OK
+BFF --> FE : 200 OK\n{ message: "Session invalidated" }
+deactivate BFF
+
+@enduml

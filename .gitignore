@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.env
+.DS_Store
+.pnpm-store/
+.devcontainer
+yarn.lock
+.vscode/
+

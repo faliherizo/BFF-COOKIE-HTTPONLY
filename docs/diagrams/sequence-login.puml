@@ -1,0 +1,97 @@
+@startuml sequence-login
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 10
+skinparam sequenceParticipant underline
+
+title Flux d'Authentification (Login) — Pattern BFF avec Keycloak
+
+actor "Utilisateur" as User
+participant "Angular\n(Frontend)\nPort 4200" as FE #LightBlue
+participant "Popup\nNavigateur" as Popup #LightYellow
+participant "Express.js\n(BFF)\nPort 3000" as BFF #LightGreen
+participant "Keycloak\n(IdP)\nPort 8443" as KC #Orange
+database "Redis\n(Sessions)" as Redis #LightCoral
+
+== 1. Initiation du Login ==
+
+User -> FE : Clic sur "Login"
+activate FE
+FE -> FE : AuthService.login()
+FE -> Popup : window.open(\n  "/auth/keycloak-init",\n  "kcLoginPopup"\n)
+FE -> FE : Enregistre listener\npostMessage("LOGIN_SUCCESS")
+deactivate FE
+
+== 2. Initialisation OAuth2 ==
+
+activate Popup
+Popup -> BFF : GET /auth/keycloak-init
+activate BFF
+BFF -> Redis : session.save()
+Redis --> BFF : OK
+BFF --> Popup : HTML/JS redirect\n→ /auth/keycloak
+deactivate BFF
+
+== 3. Redirection vers Keycloak ==
+
+Popup -> BFF : GET /auth/keycloak
+activate BFF
+BFF -> BFF : passport.authenticate('keycloak')\nGénère PKCE (code_verifier + code_challenge)\nStocke state + PKCE en session
+BFF -> Redis : Sauvegarde state + PKCE\nen session
+Redis --> BFF : OK
+BFF --> Popup : 302 Redirect →\nKeycloak Authorization Endpoint\n+ code_challenge + state
+deactivate BFF
+
+== 4. Authentification Keycloak ==
+
+Popup -> KC : GET /realms/{realm}/protocol/\nopenid-connect/auth\n?response_type=code\n&client_id=...\n&code_challenge=...\n&state=...
+activate KC
+KC --> Popup : Page de login Keycloak
+deactivate KC
+User -> Popup : Saisie identifiants\n(username + password)
+Popup -> KC : POST login form
+activate KC
+KC -> KC : Valide les identifiants
+KC --> Popup : 302 Redirect →\n/auth/keycloak/callback\n?code=AUTH_CODE&state=...
+deactivate KC
+
+== 5. Échange du Code Authorization ==
+
+Popup -> BFF : GET /auth/keycloak/callback\n?code=AUTH_CODE&state=...
+activate BFF
+BFF -> BFF : passport.authenticate('keycloak')\ncallback handler
+BFF -> Redis : Récupère state + code_verifier\ndepuis la session
+Redis --> BFF : Session data
+BFF -> BFF : Vérifie state match
+BFF -> KC : POST /realms/{realm}/protocol/\nopenid-connect/token\n{grant_type: authorization_code,\n code: AUTH_CODE,\n code_verifier: ...}
+activate KC
+KC -> KC : Vérifie le code\n+ code_verifier (PKCE)
+KC --> BFF : { access_token,\n  refresh_token,\n  id_token }
+deactivate KC
+
+== 6. Création de la Session ==
+
+BFF -> BFF : Extrait profil utilisateur\nStocke tokens en session\n(JAMAIS envoyés au client)
+BFF -> Redis : req.logIn(user)\nSauvegarde session complète\n{user, tokens: {access, refresh, id}}
+Redis --> BFF : OK
+BFF --> Popup : HTML/JS :\nwindow.opener.postMessage(\n  {type: 'LOGIN_SUCCESS'}\n);\nwindow.close();
+deactivate BFF
+
+== 7. Finalisation côté Frontend ==
+
+Popup --> FE : postMessage("LOGIN_SUCCESS")
+deactivate Popup
+activate FE
+FE -> FE : AuthService.markLoggedIn()\nisLoggedIn = true\nauthStateChanged.next()
+FE -> FE : Affiche Toastr "Success"\nFerme la popup
+FE -> FE : NavbarComponent reconstruit\nles items de navigation
+deactivate FE
+
+note right of FE
+  **Sécurité BFF** : Le cookie "angular-session"
+  (HttpOnly, Secure, SameSite=None) est le seul
+  élément côté client. Aucun token n'est exposé.
+end note
+
+@enduml

@@ -1,0 +1,176 @@
+@startuml component-architecture
+!theme plain
+skinparam backgroundColor #FEFEFE
+skinparam componentStyle uml2
+skinparam roundcorner 10
+skinparam linetype ortho
+
+title Architecture des Composants — Angular BFF Keycloak
+
+package "Navigateur" as Browser {
+
+  package "Angular 19 (Port 4200)" as Frontend #LightBlue {
+    
+    package "Core" {
+      [AppComponent] as App
+      [main.ts\n(Bootstrap)] as Main
+      [AppConfig\n(APP_SETTINGS)] as Config
+      [APP_ROUTES] as Routes
+    }
+    
+    package "Components" {
+      [NavbarComponent] as Navbar
+      [HomeComponent] as Home
+      [ProfileComponent] as Profile
+      [ProductListComponent] as ProductList
+      [TransactionsComponent] as Transactions
+      [AccessDeniedComponent] as AccessDenied
+      [FooterComponent] as Footer
+    }
+    
+    package "Services" {
+      [AuthService] as AuthSvc
+      [ThemeService] as ThemeSvc
+      [GlobalErrorHandler] as ErrorHandler
+    }
+    
+    package "Guards & Interceptors" {
+      [authGuard\n(CanActivate)] as Guard
+      [WithCredentials\nInterceptor] as Interceptor
+    }
+    
+    package "Models" {
+      [KeycloakUser] as UserModel
+      [Product] as ProductModel
+      [Transaction] as TransactionModel
+      [UserProfile] as ProfileModel
+    }
+  }
+}
+
+package "Express.js BFF (Port 3000)" as Backend #LightGreen {
+  
+  package "Core" {
+    [index.ts\n(HTTPS Server)] as Server
+    [app.ts\n(Express App)] as ExpressApp
+    [env.ts\n(Configuration)] as EnvConfig
+    [logger.ts\n(Winston)] as Logger
+  }
+  
+  package "Authentication" {
+    [KeycloakStrategy\n(Passport.js)] as KCStrategy
+    [isAuthenticated\nMiddleware] as AuthMW
+    [keycloakProxy\nMiddleware] as ProxyMW
+  }
+  
+  package "Routes" {
+    [authRoutes\n(/auth/*)] as AuthRoutes
+    [protectedRoutes\n(/api/*)] as ProtRoutes
+    [publicRoutes\n(/, /login)] as PubRoutes
+    [sessionRoutes\n(/api/sessions)] as SessRoutes
+  }
+  
+  package "Services" {
+    [MockDataService\n(Faker.js)] as MockSvc
+    [RedisSession\n(connect-redis)] as RedisSvc
+  }
+}
+
+cloud "Keycloak v26 (Port 8443)" as Keycloak #Orange {
+  [Authorization\nEndpoint] as AuthEndpoint
+  [Token\nEndpoint] as TokenEndpoint
+  [Logout\nEndpoint] as LogoutEndpoint
+  [UserInfo\nEndpoint] as UserInfoEndpoint
+}
+
+database "Redis 7.0\n(Port 6379)" as Redis #LightCoral {
+  [Session Store\n(sess:*)] as SessionStore
+}
+
+database "PostgreSQL 15\n(Port 5432)" as Postgres #LightGray {
+  [Keycloak DB\n(realms, users, clients)] as KCDB
+}
+
+' --- Frontend internal relations ---
+Main --> App
+Main --> Routes
+Main --> Config
+Main --> Interceptor
+Main --> ErrorHandler
+
+App --> Navbar
+App --> Footer
+
+Routes --> Home
+Routes --> Profile
+Routes --> ProductList
+Routes --> Transactions
+Routes --> AccessDenied
+Routes --> Guard
+
+Navbar --> AuthSvc
+Navbar --> ThemeSvc
+Guard --> AuthSvc
+
+Profile --> UserModel
+Profile --> ProfileModel
+ProductList --> ProductModel
+Transactions --> TransactionModel
+
+' --- Frontend to Backend ---
+AuthSvc -down-> AuthRoutes : HTTPS\n/auth/keycloak-init\n/auth/logout\n(popup window)
+Profile -down-> ProtRoutes : HTTPS\n/api/profile\n(withCredentials)
+ProductList -down-> ProtRoutes : HTTPS\n/api/products\n(withCredentials)
+Transactions -down-> ProtRoutes : HTTPS\n/api/transactions\n(withCredentials)
+
+' --- Backend internal relations ---
+Server --> ExpressApp
+Server --> EnvConfig
+ExpressApp --> KCStrategy
+ExpressApp --> AuthMW
+ExpressApp --> ProxyMW
+ExpressApp --> AuthRoutes
+ExpressApp --> ProtRoutes
+ExpressApp --> PubRoutes
+ExpressApp --> SessRoutes
+ExpressApp --> RedisSvc
+
+ProtRoutes --> AuthMW
+ProtRoutes --> MockSvc
+AuthRoutes --> KCStrategy
+
+' --- Backend to external services ---
+KCStrategy -down-> AuthEndpoint : OAuth2\nAuthorization Code\n+ PKCE
+KCStrategy -down-> TokenEndpoint : Token Exchange\n(code → tokens)
+AuthRoutes -down-> LogoutEndpoint : Front-channel\nLogout\n(id_token_hint)
+
+RedisSvc -down-> SessionStore : ioredis\nGET/SET/DEL
+SessRoutes --> RedisSvc
+
+Keycloak -down-> KCDB : JDBC
+
+' --- Legend ---
+legend right
+  |= Couleur |= Composant |
+  | <#LightBlue> | Frontend Angular |
+  | <#LightGreen> | Backend Express.js (BFF) |
+  | <#Orange> | Keycloak (Identity Provider) |
+  | <#LightCoral> | Redis (Session Store) |
+  | <#LightGray> | PostgreSQL (Keycloak DB) |
+endlegend
+
+note bottom of Frontend
+  **Cookie-only communication**
+  Le frontend ne reçoit jamais de token.
+  Toutes les requêtes API incluent
+  le cookie HttpOnly "angular-session".
+end note
+
+note bottom of Backend
+  **Token isolation**
+  Les tokens OAuth2 sont stockés
+  exclusivement dans la session
+  côté serveur (Redis/Memory).
+end note
+
+@enduml
