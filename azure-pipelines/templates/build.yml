@@ -1,0 +1,149 @@
+# ---------------------------------------------------------------------------------------------------------
+# Les étapes de compilation
+# ---------------------------------------------------------------------------------------------------------
+
+# Responsabilité : Construire et packager les artefacts Java 
+
+stages:
+
+- stage:  build
+  displayName: Compilation
+  dependsOn: QualityCheck
+  #condition: succeeded() 
+  #condition: and(succeeded(), eq(variables['control.build'], 'true'))
+  condition: eq(variables['control.build'], 'true')
+  pool: vmss-ado-agents-prod
+
+  jobs: 
+
+  - job: A
+    displayName: 'Compilation'
+    # Taches de l'étape A
+    steps:
+
+      # ---------------------------------------------------------------------------------------------------------
+      # Installation de JDK
+
+      - template: jdk-setup.yml
+
+      # Cache Maven----------------------------------------------------------------------------------------------
+      - task: Cache@2
+        displayName: 'Cache des dépendances Maven'
+        inputs:
+          key: 'maven | "$(Agent.OS)" | pom.xml'
+          path: '$(HOME)/.m2/repository'
+
+      # ---------------------------------------------------------------------------------------------------------
+      # Authentification maven vers les Flux 
+
+      - task: MavenAuthenticate@0
+        displayName: 'Authentification maven vers les Flux'
+        inputs:
+          artifactsFeeds: 'DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-LAB'
+
+      # ---------------------------------------------------------------------------------------------------------
+      # Building de l'artificat  
+
+
+      - task: Maven@4
+        displayName: 'Compilation du code'
+        inputs:
+          mavenPomFile: 'pom.xml'
+          goals: '-U clean install'
+          publishJUnitResults: false
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '$(jdk.version.option)'
+          jdkArchitectureOption: '$(jdk.architecture)'
+          mavenVersionOption: 'Default'
+          mavenOptions: '-Xmx3072m'
+          options: '-DskipTests'
+          mavenAuthenticateFeed: false
+          effectivePomSkip: false
+          sonarQubeRunAnalysis: false
+          
+          # clean : supprime les fichiers générés au moment de la construction dans le répertoire d'un projet (cible par défaut)
+          # install: installe le package dans le référentiel local, pour l'utiliser comme dépendance dans d'autres projets localement
+          # deploy : copie le package final dans le référentiel distant pour le partager avec d'autres développeurs et projets.
+
+      # ---------------------------------------------------------------------------------------------------------
+      # Publication de l'artifact vers un fichier *.zip et le publier sur l'écran de l'agent
+
+      # Vider le dossier staging  et nommer l''artifact
+
+      - script: |
+            sudo apt install rename
+            rm -f  $(Build.ArtifactStagingDirectory)/artefacts/*.*
+
+        displayName: 'Vider le dossier staging  et nommer l''artifact'
+        enabled: true
+
+      - task: CopyFiles@2
+        inputs:
+          SourceFolder: '$(rootFolder)'
+          Contents: |
+            **/**/*.ear
+            **/**/*.war
+            **/*.ear
+            **/*.war
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/DevOps_$(Build.SourceVersion)'
+          CleanTargetFolder: true
+          OverWrite: true
+        displayName: 'Filtrer les fichiers *.WAR, *.EAR et *.JAR'
+
+      # Archivage
+      - task: ArchiveFiles@2
+        inputs:
+          rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/DevOps_$(Build.SourceVersion)'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/artefacts/DevOps_$(Build.SourceVersion).zip'
+          replaceExistingArchive: true
+        displayName: 'Archivage de l''artefact *.zip'
+        enabled: true
+
+      # Copie des fihciers vers le dossier d''artefacts staging sur l''agent'
+      - task: CopyFiles@2
+        displayName: 'Copie des fichiers vers le dossier d''artefacts staging sur l''agent'
+        inputs:
+          Contents: '**/*.zip'
+          TargetFolder: '$(build.artifactstagingdirectory)/artefacts'
+          CleanTargetFolder: true
+          OverWrite: true
+          flattenFolders: true
+        enabled: false
+      
+      # Publication de l'artifact vers un fichier *.tgz et le publier sur l'écran de l'agent
+
+
+      # Publication sur l'agent - Méthode 1:   
+
+      - upload: $(Build.ArtifactStagingDirectory)/artefacts/DevOps_$(Build.SourceVersion).zip
+        displayName: 'Rendre disponible téléchargable l''artefact sur l''écran de l''agent'
+        artifact: Artifacts
+        enabled: false
+
+      # Publication sur l'agent - Méthode 2:   
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Rendre disponible téléchargable l''artefact sur l''écran de l''agent'
+        inputs:
+          PathtoPublish: '$(Build.ArtifactStagingDirectory)/artefacts'
+          ArtifactName: 'Artifacts'
+          publishLocation: 'Container'      
+
+
+  - job: B
+    displayName: 'Vérification poste-compilation'
+    dependsOn: A
+    condition: succeeded()
+
+    # Taches de l'étape B
+    steps: 
+
+    - task: Bash@3
+      displayName: 'Lien de l''artifact :'
+      inputs:
+        targetType: 'inline'
+        script: |          
+          echo 'Lien de la build : '
+          echo $buildUrl="$(System.TeamFoundationCollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)" 

@@ -6,8 +6,8 @@ set -e
 # Define directories
 ROOT_DIR=$(pwd)
 CERTS_DIR="${ROOT_DIR}/certs"
-FRONTEND_CERTS_DIR="${ROOT_DIR}/frontend/certs"
-BACKEND_CERTS_DIR="${ROOT_DIR}/backend/certs"
+FRONTEND_CERTS_DIR="${ROOT_DIR}/network/certs"
+BACKEND_CERTS_DIR="${ROOT_DIR}/bff-network/certs"
 KEYCLOAK_CERTS_DIR="${ROOT_DIR}/keycloak/certs"
 
 # Define Keycloak keystore variables
@@ -39,7 +39,7 @@ else
     # Generate CA self-signed certificate
     openssl req -x509 -new -nodes -key "${CERTS_DIR}/ca.key.pem" -sha256 -days 3650 \
         -out "${CERTS_DIR}/ca.cert.pem" \
-        -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=MyDevCA"
+        -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=DevCA"
 
     echo "CA Certificate and Key generated at ${CERTS_DIR}"
 fi
@@ -167,7 +167,7 @@ echo "=============================="
 read -p "Do you want to import the CA certificate to your system's trusted store? [y/N]: " TRUST_CA
 
 if [[ "$TRUST_CA" =~ ^[Yy]$ ]]; then
-    sudo cp "${CERTS_DIR}/ca.cert.pem" /usr/local/share/ca-certificates/mydevca.crt
+    sudo cp "${CERTS_DIR}/ca.cert.pem" /usr/local/share/ca-certificates/devca.crt
     sudo update-ca-certificates
     echo "CA certificate imported and trusted."
     echo "Please restart your browser to apply changes."

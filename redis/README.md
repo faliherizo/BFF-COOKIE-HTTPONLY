@@ -45,7 +45,7 @@ REDIS_PASSWORD=changeit
 The Redis session store implementation (`redis-session.ts`) provides:
 
 1. **Session Storage**
-   - Prefix: 'myapp:'
+   - Prefix: 'network:'
    - Default TTL: 15 minutes
    - Automatic session serialization/deserialization
 
@@ -83,7 +83,7 @@ The Redis session store implementation (`redis-session.ts`) provides:
 
 2. **Session Monitor**
    - Use Redis Commander to inspect active sessions
-   - Filter by prefix: 'myapp:'
+   - Filter by prefix: 'network:'
    - View session content and TTL
 
 3. **Common Issues**

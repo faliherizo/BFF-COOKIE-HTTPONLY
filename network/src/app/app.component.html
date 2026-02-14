@@ -1,0 +1,7 @@
+<nw-navbar></nw-navbar>
+<main class="app-main" [class.authenticated]="authService.isAuthenticated()">
+  <div class="app-container" [class.li-container]="authService.isAuthenticated()">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+<nw-footer></nw-footer>

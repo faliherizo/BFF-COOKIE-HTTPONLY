@@ -1,0 +1,88 @@
+<div class="landing">
+  <!-- Hero Section -->
+  <section class="landing__hero">
+    <div class="landing__hero-content">
+      <h1 class="landing__title">
+        Bienvenue dans votre communauté professionnelle
+      </h1>
+      <div class="landing__cta">
+        <button class="li-btn li-btn--primary landing__cta-btn" (click)="login()">
+          Se connecter avec Keycloak
+        </button>
+        <div class="landing__divider">
+          <span>ou</span>
+        </div>
+        <button class="li-btn li-btn--outline landing__cta-btn" (click)="login()">
+          <mat-icon>mail</mat-icon>
+          S'inscrire avec un email
+        </button>
+        <p class="landing__terms">
+          En cliquant sur « Continuer », vous acceptez les 
+          <a href="#">Conditions d'utilisation</a> et la 
+          <a href="#">Politique de confidentialité</a> de Network.
+        </p>
+      </div>
+    </div>
+    <div class="landing__hero-image">
+      <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg" class="landing__illustration">
+        <!-- Simplified illustration of professionals connecting -->
+        <rect x="50" y="80" width="500" height="300" rx="20" fill="#f3f2ef"/>
+        <circle cx="200" cy="200" r="60" fill="#d0e8ff"/>
+        <circle cx="400" cy="200" r="60" fill="#d0e8ff"/>
+        <circle cx="300" cy="160" r="50" fill="#0a66c2" opacity="0.2"/>
+        <rect x="160" y="280" width="80" height="8" rx="4" fill="#0a66c2" opacity="0.4"/>
+        <rect x="360" y="280" width="80" height="8" rx="4" fill="#0a66c2" opacity="0.4"/>
+        <line x1="250" y1="200" x2="350" y2="200" stroke="#0a66c2" stroke-width="3" stroke-dasharray="8,4"/>
+        <circle cx="200" cy="200" r="25" fill="#0a66c2" opacity="0.6"/>
+        <circle cx="400" cy="200" r="25" fill="#0a66c2" opacity="0.6"/>
+        <path d="M192 195 l6 8 l12-16" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <path d="M392 195 l6 8 l12-16" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="landing__features">
+    <div class="landing__features-grid">
+      <div *ngFor="let feature of features" class="landing__feature-card li-card">
+        <mat-icon class="landing__feature-icon">{{ feature.icon }}</mat-icon>
+        <h3>{{ feature.title }}</h3>
+        <p>{{ feature.description }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="landing__stats">
+    <h2>Rejoignez la communauté Network</h2>
+    <div class="landing__stats-grid">
+      <div class="landing__stat">
+        <span class="landing__stat-number">1M+</span>
+        <span class="landing__stat-label">Membres</span>
+      </div>
+      <div class="landing__stat">
+        <span class="landing__stat-number">50K+</span>
+        <span class="landing__stat-label">Entreprises</span>
+      </div>
+      <div class="landing__stat">
+        <span class="landing__stat-number">10K+</span>
+        <span class="landing__stat-label">Offres d'emploi</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Explore Section -->
+  <section class="landing__explore">
+    <h2>Explorez les sujets qui vous intéressent</h2>
+    <div class="landing__topics">
+      <a href="#" class="landing__topic-pill">Développement</a>
+      <a href="#" class="landing__topic-pill">Design</a>
+      <a href="#" class="landing__topic-pill">Marketing</a>
+      <a href="#" class="landing__topic-pill">Data Science</a>
+      <a href="#" class="landing__topic-pill">Intelligence Artificielle</a>
+      <a href="#" class="landing__topic-pill">Management</a>
+      <a href="#" class="landing__topic-pill">Finance</a>
+      <a href="#" class="landing__topic-pill">Ressources Humaines</a>
+    </div>
+  </section>
+</div>

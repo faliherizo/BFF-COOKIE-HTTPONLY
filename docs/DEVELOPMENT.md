@@ -17,7 +17,7 @@
 ### Key Files
 
 ```plaintext
-backend/
+bff-network/
 ├── src/
 │   ├── app.ts                 # Application setup
 │   ├── auth/
@@ -43,15 +43,15 @@ backend/
 ### Environment Variables
 
 ```ini
-# backend/.env
+# bff-network/.env
 # Domain Configuration
 SESSION_DOMAIN=.local.com
 COOKIE_ORIGIN=https://frontend.local.com:4200
 
 # Keycloak Settings
-KEYCLOAK_REALM=TestRealm
+KEYCLOAK_REALM=NetworkRealm
 KEYCLOAK_AUTH_SERVER_URL=https://keycloak:8443
-KEYCLOAK_CLIENT_ID=angular-public-client
+KEYCLOAK_CLIENT_ID=network-client
 KEYCLOAK_CALLBACK_URL=https://backend.local.com:3000/auth/keycloak/callback
 
 # Session Configuration
@@ -70,13 +70,13 @@ REDIS_PASSWORD=changeit
 cd keycloak && docker compose up -d
 cd ../redis && docker compose up -d
 
-# Start backend
-cd ../backend
+# Start BFF
+cd ../bff-network
 npm install
 npm run dev
 
 # Start frontend
-cd ../frontend
+cd ../network
 npm install
 npm start
 ```
@@ -102,12 +102,12 @@ Both frontend and backend support hot reloading:
 
 ### Running Tests
 ```bash
-# Backend tests
-cd backend
+# BFF tests
+cd bff-network
 npm test
 
 # Frontend tests
-cd frontend
+cd network
 npm test
 ```
 
@@ -119,8 +119,8 @@ npm test
      "type": "node",
      "request": "launch",
      "name": "Debug Backend",
-     "program": "${workspaceFolder}/backend/src/index.ts",
-     "preLaunchTask": "tsc: build - backend/tsconfig.json"
+     "program": "${workspaceFolder}/bff-network/src/index.ts",
+     "preLaunchTask": "tsc: build - bff-network/tsconfig.json"
    }
    ```
 
@@ -134,13 +134,13 @@ npm test
 ### Container Management
 ```bash
 # Build specific service
-docker compose build backend
+docker compose build bff-network
 
 # Rebuild without cache
 docker compose build --no-cache
 
 # View logs
-docker compose logs -f backend
+docker compose logs -f bff-network
 ```
 
 ### Workspace Variable

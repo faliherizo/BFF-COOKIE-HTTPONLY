@@ -1,0 +1,356 @@
+Picked up JAVA_TOOL_OPTIONS: -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8
+[0.028s][warning][cds] This file is not the one used while building the shared archive file: 'C:\Users\RANF01\AppData\Roaming\Code\User\globalStorage\pleiades.java-extension-pack-jdk\java\latest\lib\modules', size has changed
+[INFO] Scanning for projects...
+[WARNING] The requested profile "" could not be activated because it does not exist.
+[INFO] 
+[INFO] ------------------------< com.network:backend >-------------------------
+[INFO] Building backend 1.0.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ backend ---
+[INFO] Deleting c:\Users\RANF01A\pr\BFF-COOKIE-HTTPONLY\BFF-COOKIE-HTTPONLY\backend\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ backend ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 27 source files with javac [debug parameters release 25] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[17,66] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Connection
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[26,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Connection>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[30,66] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Connection
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[39,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Connection>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[21,64] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[23,31] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Author
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[39,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.FeedPost>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[45,17] cannot find symbol
+  symbol:   method setContent(java.lang.String)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[47,13] cannot find symbol
+  symbol:   method setLikes(int)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[48,13] cannot find symbol
+  symbol:   method setComments(int)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[49,13] cannot find symbol
+  symbol:   method setShares(int)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[50,13] cannot find symbol
+  symbol:   method setCreatedAt(java.lang.String)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[51,13] cannot find symbol
+  symbol:   method setLiked(boolean)
+  location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[21,68] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Conversation
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[23,41] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[34,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Conversation>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[38,42] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[46,46] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[54,63] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Message
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[62,39] invalid method reference
+  cannot find symbol
+    symbol:   method getTimestamp()
+    location: class com.network.backend.model.Message
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[34,32] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Notification
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[37,46] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Notification.Actor
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[46,40] invalid method reference
+  cannot find symbol
+    symbol:   method getTimestamp()
+    location: class com.network.backend.model.Notification
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[31,38] cannot find symbol
+  symbol:   method getAddress()
+  location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[32,36] cannot find symbol
+  symbol:   method getPhone()
+  location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[33,38] cannot find symbol
+  symbol:   method getCompany()
+  location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[34,42] cannot find symbol
+  symbol:   method getRecentLogin()
+  location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[34,27] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserProfile
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[45,50] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserProfile.Experience
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[56,46] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserProfile.Education
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[72,27] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[73,45] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserDetails.Address
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[19,67] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Transaction
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[27,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Transaction>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[31,63] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.Product
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[40,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Product>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[9,66] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[10,54] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserSettings.Notifications
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[15,42] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserSettings.Privacy
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[25,28] cannot find symbol
+  symbol:   method builder()
+  location: class com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[26,52] cannot find symbol
+  symbol:   method getNotifications()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[27,51] cannot find symbol
+  symbol:   method getNotifications()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[28,51] cannot find symbol
+  symbol:   method getPrivacy()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[29,42] cannot find symbol
+  symbol:   method getLanguage()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[30,39] cannot find symbol
+  symbol:   method getTheme()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[35,21] cannot find symbol
+  symbol:   method getLanguage()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[36,49] cannot find symbol
+  symbol:   method getLanguage()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[38,21] cannot find symbol
+  symbol:   method getTheme()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[39,46] cannot find symbol
+  symbol:   method getTheme()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[41,21] cannot find symbol
+  symbol:   method getProfileVisibility()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[42,28] cannot find symbol
+  symbol:   method getPrivacy()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[42,71] cannot find symbol
+  symbol:   method getProfileVisibility()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[44,24] cannot find symbol
+  symbol:   method getNotifications()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[44,61] cannot find symbol
+  symbol:   method isEmailNotifications()
+  location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[45,24] cannot find symbol
+  symbol:   method getNotifications()
+  location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[45,60] cannot find symbol
+  symbol:   method isPushNotifications()
+  location: variable settings of type com.network.backend.model.UserSettings
+[INFO] 56 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  17.560 s
+[INFO] Finished at: 2026-02-13T18:37:07-05:00
+[INFO] ------------------------------------------------------------------------
+[WARNING] The requested profile "" could not be activated because it does not exist.
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.13.0:compile (default-compile) on project backend: Compilation failure: Compilation failure: 
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[17,66] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Connection
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[26,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Connection>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[30,66] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Connection
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ConnectionService.java:[39,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Connection>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[21,64] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[23,31] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Author
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[39,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.FeedPost>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[45,17] cannot find symbol
+[ERROR]   symbol:   method setContent(java.lang.String)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[47,13] cannot find symbol
+[ERROR]   symbol:   method setLikes(int)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[48,13] cannot find symbol
+[ERROR]   symbol:   method setComments(int)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[49,13] cannot find symbol
+[ERROR]   symbol:   method setShares(int)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[50,13] cannot find symbol
+[ERROR]   symbol:   method setCreatedAt(java.lang.String)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/FeedService.java:[51,13] cannot find symbol
+[ERROR]   symbol:   method setLiked(boolean)
+[ERROR]   location: variable post of type com.network.backend.model.FeedPost
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[21,68] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Conversation
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[23,41] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[34,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Conversation>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[38,42] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[46,46] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Participant
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[54,63] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Message
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/MessageService.java:[62,39] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method getTimestamp()
+[ERROR]     location: class com.network.backend.model.Message
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[34,32] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Notification
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[37,46] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Notification.Actor
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/NotificationService.java:[46,40] invalid method reference
+[ERROR]   cannot find symbol
+[ERROR]     symbol:   method getTimestamp()
+[ERROR]     location: class com.network.backend.model.Notification
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[31,38] cannot find symbol
+[ERROR]   symbol:   method getAddress()
+[ERROR]   location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[32,36] cannot find symbol
+[ERROR]   symbol:   method getPhone()
+[ERROR]   location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[33,38] cannot find symbol
+[ERROR]   symbol:   method getCompany()
+[ERROR]   location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/controller/ProfileController.java:[34,42] cannot find symbol
+[ERROR]   symbol:   method getRecentLogin()
+[ERROR]   location: variable details of type com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[34,27] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserProfile
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[45,50] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserProfile.Experience
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[56,46] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserProfile.Education
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[72,27] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserDetails
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/ProfileService.java:[73,45] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserDetails.Address
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[19,67] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Transaction
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[27,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Transaction>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[31,63] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.Product
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/LegacyService.java:[40,17] incompatible types: java.util.List<java.lang.Object> cannot be converted to java.util.List<com.network.backend.model.Product>
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[9,66] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[10,54] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserSettings.Notifications
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[15,42] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserSettings.Privacy
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[25,28] cannot find symbol
+[ERROR]   symbol:   method builder()
+[ERROR]   location: class com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[26,52] cannot find symbol
+[ERROR]   symbol:   method getNotifications()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[27,51] cannot find symbol
+[ERROR]   symbol:   method getNotifications()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[28,51] cannot find symbol
+[ERROR]   symbol:   method getPrivacy()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[29,42] cannot find symbol
+[ERROR]   symbol:   method getLanguage()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[30,39] cannot find symbol
+[ERROR]   symbol:   method getTheme()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[35,21] cannot find symbol
+[ERROR]   symbol:   method getLanguage()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[36,49] cannot find symbol
+[ERROR]   symbol:   method getLanguage()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[38,21] cannot find symbol
+[ERROR]   symbol:   method getTheme()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[39,46] cannot find symbol
+[ERROR]   symbol:   method getTheme()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[41,21] cannot find symbol
+[ERROR]   symbol:   method getProfileVisibility()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[42,28] cannot find symbol
+[ERROR]   symbol:   method getPrivacy()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[42,71] cannot find symbol
+[ERROR]   symbol:   method getProfileVisibility()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[44,24] cannot find symbol
+[ERROR]   symbol:   method getNotifications()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[44,61] cannot find symbol
+[ERROR]   symbol:   method isEmailNotifications()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[45,24] cannot find symbol
+[ERROR]   symbol:   method getNotifications()
+[ERROR]   location: variable currentSettings of type com.network.backend.model.UserSettings.Full
+[ERROR] /c:/Users/RANF01A/pr/BFF-COOKIE-HTTPONLY/BFF-COOKIE-HTTPONLY/backend/src/main/java/com/network/backend/service/SettingsService.java:[45,60] cannot find symbol
+[ERROR]   symbol:   method isPushNotifications()
+[ERROR]   location: variable settings of type com.network.backend.model.UserSettings
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

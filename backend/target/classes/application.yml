@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: backend
+
+# CORS configuration
+app:
+  cors:
+    allowed-origins:
+      - https://backend.local.com:3000
+      - https://bff-network.local.com:3000
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: Content-Type,Authorization,X-Forwarded-User
+    allow-credentials: true
+
+logging:
+  level:
+    com.network.backend: DEBUG
+    org.springframework.web: INFO

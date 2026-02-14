@@ -1,0 +1,232 @@
+@use '@angular/material' as mat;
+
+// ─── Angular Material Core ──────────────────────────────────────────
+@include mat.core();
+
+// ─── LinkedIn-inspired color palette ────────────────────────────────
+$linkedin-blue: (
+  50: #e8f0fe,
+  100: #c5dcfc,
+  200: #9ec5fa,
+  300: #77aef7,
+  400: #5a9df5,
+  500: #0a66c2,
+  600: #004182,
+  700: #003366,
+  800: #00264d,
+  900: #001a33,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$linkedin-accent: (
+  50: #fef3e0,
+  100: #fce5b3,
+  200: #fad580,
+  300: #f8c54d,
+  400: #f6ba26,
+  500: #e7a33e,
+  600: #c98a2e,
+  700: #a87020,
+  800: #875714,
+  900: #5c3a0a,
+  A100: #ffecb3,
+  A200: #ffd54f,
+  A400: #ffca28,
+  A700: #ffc107,
+  contrast: (
+    50: rgba(0, 0, 0, 0.87),
+    100: rgba(0, 0, 0, 0.87),
+    200: rgba(0, 0, 0, 0.87),
+    300: rgba(0, 0, 0, 0.87),
+    400: rgba(0, 0, 0, 0.87),
+    500: rgba(0, 0, 0, 0.87),
+    600: rgba(0, 0, 0, 0.87),
+    700: rgba(0, 0, 0, 0.87),
+    800: rgba(0, 0, 0, 0.87),
+    900: white,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  )
+);
+
+// ─── Light theme (LinkedIn default) ─────────────────────────────────
+$light-theme: mat.m2-define-light-theme(
+  (
+    color: (
+      primary: mat.m2-define-palette($linkedin-blue, 500),
+      accent: mat.m2-define-palette($linkedin-accent, 500),
+      warn: mat.m2-define-palette(mat.$m2-red-palette),
+    ),
+    typography: mat.m2-define-typography-config(
+      $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
+    ),
+    density: 0,
+  )
+);
+
+// ─── Dark theme ─────────────────────────────────────────────────────
+$dark-theme: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: mat.m2-define-palette($linkedin-blue, 500),
+      accent: mat.m2-define-palette($linkedin-accent, 500),
+      warn: mat.m2-define-palette(mat.$m2-red-palette),
+    ),
+    typography: mat.m2-define-typography-config(
+      $font-family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
+    ),
+    density: 0,
+  )
+);
+
+@include mat.all-component-themes($light-theme);
+
+.dark-theme {
+  @include mat.all-component-colors($dark-theme);
+}
+
+// ─── CSS Custom Properties (LinkedIn Design Tokens) ─────────────────
+:root {
+  --li-blue: #0a66c2;
+  --li-blue-hover: #004182;
+  --li-blue-light: #d0e8ff;
+  --li-bg: #f3f2ef;
+  --li-bg-card: #ffffff;
+  --li-border: #e0e0e0;
+  --li-text-primary: #191919;
+  --li-text-secondary: #666666;
+  --li-text-muted: #999999;
+  --li-green: #057642;
+  --li-red: #cc1016;
+  --li-orange: #e7a33e;
+  --li-nav-height: 52px;
+  --li-max-width: 1128px;
+  --li-radius: 8px;
+  --li-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 3px rgba(0, 0, 0, 0.08);
+}
+
+// ─── Global Reset & Base ────────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  background-color: var(--li-bg);
+  color: var(--li-text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--li-blue);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+    color: var(--li-blue-hover);
+  }
+}
+
+// ─── LinkedIn Card Style ────────────────────────────────────────────
+.li-card {
+  background: var(--li-bg-card);
+  border-radius: var(--li-radius);
+  box-shadow: var(--li-shadow);
+  overflow: hidden;
+}
+
+// ─── LinkedIn Button Styles ─────────────────────────────────────────
+.li-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s, box-shadow 0.15s;
+  border: none;
+  outline: none;
+
+  &--primary {
+    background-color: var(--li-blue);
+    color: white;
+    &:hover { background-color: var(--li-blue-hover); }
+  }
+
+  &--outline {
+    background: transparent;
+    color: var(--li-blue);
+    border: 1px solid var(--li-blue);
+    &:hover { 
+      background-color: var(--li-blue-light);
+      border-color: var(--li-blue-hover);
+    }
+  }
+
+  &--ghost {
+    background: transparent;
+    color: var(--li-text-secondary);
+    &:hover { background-color: rgba(0, 0, 0, 0.05); }
+  }
+
+  &--round {
+    border-radius: 50%;
+    padding: 8px;
+    min-width: unset;
+  }
+}
+
+// ─── Layout Helpers ─────────────────────────────────────────────────
+.li-container {
+  max-width: var(--li-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.li-main-layout {
+  display: grid;
+  grid-template-columns: 225px 1fr 300px;
+  gap: 24px;
+  padding-top: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 300px;
+  }
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ─── Snackbar override ──────────────────────────────────────────────
+::ng-deep .mat-snack-bar-container {
+  background-color: var(--li-blue);
+  color: white;
+  border-radius: 4px;
+}
+
+::ng-deep .mat-simple-snackbar-action {
+  color: var(--li-orange);
+}

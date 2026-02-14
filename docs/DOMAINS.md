@@ -72,7 +72,7 @@ BACKEND_DOMAIN_NAME="your-backend.domain"
 KEYCLOAK_DOMAIN_NAME="your-keycloak.domain"
 ```
 
-2. Update environment configurations in `backend/.env`:
+2. Update environment configurations in `bff-network/.env`:
 ```ini
 SESSION_DOMAIN=.domain
 COOKIE_ORIGIN=https://your-frontend.domain:4200
@@ -82,7 +82,7 @@ KEYCLOAK_CALLBACK_URL=https://your-backend.domain:3000/auth/keycloak/callback
 
 3. Regenerate certificates:
 ```bash
-rm -rf ./certs/* ./frontend/certs/* ./backend/certs/* ./keycloak/certs/*
+rm -rf ./certs/* ./network/certs/* ./bff-network/certs/* ./keycloak/certs/*
 ./scripts/setup_ssl.sh
 ```
 
@@ -112,7 +112,7 @@ rm -rf ./certs/* ./frontend/certs/* ./backend/certs/* ./keycloak/certs/*
 
 ```bash
 # Import CA certificate
-sudo cp certs/ca.cert.pem /usr/local/share/ca-certificates/mydevca.crt
+sudo cp certs/ca.cert.pem /usr/local/share/ca-certificates/devca.crt
 sudo update-ca-certificates
 ```
 

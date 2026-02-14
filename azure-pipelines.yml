@@ -1,0 +1,56 @@
+# ---------------------------------------------------------------------------------------------------------
+# Date               |  Auteur                         |  Description                                                          
+# ---------------------------------------------------------------------------------------------------------
+#
+# 2026-02-12         |  Faliherizo R.            |  Version initial                                                        
+# 2026-02-12         |  Faliherizo R.            |  Mise à jour du pipeline  
+#                   
+# ---------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------
+# Entête du pipeline
+# ---------------------------------------------------------------------------------------------------------
+
+# Nom de la pipeline
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+# Déclarer les variables
+variables:
+- group: var-gdu-pipeline
+- name: rootFolder
+  value: '$(System.DefaultWorkingDirectory)'
+- name: tag
+  value: '$(Build.BuildId)'
+- name: SNYK_TOKEN
+  value: $(snyk.token)
+
+
+# Spécifier le repo  git 
+resources:
+  - repo: self
+
+# Déclenche le pipeline lorsqu'un commit est poussé dans la branche principale (à personnaliser)
+trigger: 
+  branches:
+    include: 
+      - main
+      - master
+      - develop
+      - feature/*
+
+
+    exclude:
+      - none
+
+
+# Déclenche le pipeline lorsque on fait pull request sur la branche main
+pr:
+- none
+
+
+# Cibler le pool d'agent
+pool:
+  name: vmss-ado-agents-prod
+
+stages:
+- template: azure-pipelines/ci.yml

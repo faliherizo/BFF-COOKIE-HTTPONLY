@@ -89,7 +89,7 @@ FE -> FE : NavbarComponent reconstruit\nles items de navigation
 deactivate FE
 
 note right of FE
-  **Sécurité BFF** : Le cookie "angular-session"
+  **Sécurité BFF** : Le cookie "network-session"
   (HttpOnly, Secure, SameSite=None) est le seul
   élément côté client. Aucun token n'est exposé.
 end note

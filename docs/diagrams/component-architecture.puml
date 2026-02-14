@@ -5,7 +5,7 @@ skinparam componentStyle uml2
 skinparam roundcorner 10
 skinparam linetype ortho
 
-title Architecture des Composants — Angular BFF Keycloak
+title Architecture des Composants — BFF Network
 
 package "Navigateur" as Browser {
 
@@ -163,7 +163,7 @@ note bottom of Frontend
   **Cookie-only communication**
   Le frontend ne reçoit jamais de token.
   Toutes les requêtes API incluent
-  le cookie HttpOnly "angular-session".
+  le cookie HttpOnly "network-session".
 end note
 
 note bottom of Backend

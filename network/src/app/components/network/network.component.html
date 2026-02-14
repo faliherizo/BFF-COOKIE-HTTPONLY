@@ -1,0 +1,78 @@
+<div class="network-page li-container">
+  <!-- Invitations Section -->
+  <section class="li-card invitations-section" *ngIf="pendingRequests.length > 0">
+    <div class="section-header">
+      <h3>Invitations ({{ pendingRequests.length }})</h3>
+    </div>
+    <div class="invitation-list">
+      <div *ngFor="let person of pendingRequests" class="invitation-item">
+        <img [src]="person.avatar" [alt]="person.name" class="invitation-avatar" />
+        <div class="invitation-info">
+          <h4>{{ person.name }}</h4>
+          <p>{{ person.headline }}</p>
+          <span class="mutual" *ngIf="person.mutualConnections > 0">
+            {{ person.mutualConnections }} relation(s) en commun
+          </span>
+        </div>
+        <div class="invitation-actions">
+          <button class="li-btn li-btn--ghost" (click)="person.pendingRequest = false">Ignorer</button>
+          <button class="li-btn li-btn--outline" (click)="acceptRequest(person)">Accepter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Suggestions Section -->
+  <section class="suggestions-section">
+    <div class="section-header">
+      <h3>Des personnes que vous pourriez connaître</h3>
+    </div>
+    <div class="suggestions-loading" *ngIf="loadingSuggestions">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="suggestions-grid" *ngIf="!loadingSuggestions">
+      <div *ngFor="let person of suggestions" class="li-card suggestion-card">
+        <div class="suggestion-cover"></div>
+        <img [src]="person.avatar" [alt]="person.name" class="suggestion-avatar" />
+        <div class="suggestion-info">
+          <h4>{{ person.name }}</h4>
+          <p>{{ person.headline }}</p>
+          <span class="mutual" *ngIf="person.mutualConnections > 0">
+            <mat-icon>people</mat-icon> {{ person.mutualConnections }} relation(s) en commun
+          </span>
+        </div>
+        <button
+          class="li-btn li-btn--outline suggestion-btn"
+          [class.pending]="person.pendingRequest"
+          (click)="connect(person)"
+          [disabled]="person.pendingRequest"
+        >
+          <mat-icon>{{ person.pendingRequest ? 'hourglass_empty' : 'person_add' }}</mat-icon>
+          {{ person.pendingRequest ? 'En attente' : 'Se connecter' }}
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- My Connections -->
+  <section class="li-card connections-section" *ngIf="myConnections.length > 0">
+    <div class="section-header">
+      <h3>Mes connexions ({{ myConnections.length }})</h3>
+    </div>
+    <div class="connections-loading" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+    <div class="connections-list" *ngIf="!loading">
+      <div *ngFor="let person of myConnections" class="connection-item">
+        <img [src]="person.avatar" [alt]="person.name" class="connection-avatar" />
+        <div class="connection-info">
+          <h4>{{ person.name }}</h4>
+          <p>{{ person.headline }}</p>
+        </div>
+        <button class="li-btn li-btn--ghost">
+          <mat-icon>chat_bubble_outline</mat-icon> Message
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

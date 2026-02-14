@@ -101,10 +101,10 @@ refreshSession(sessionId: string, newTTL: number): Promise<void>
 redis-cli -h redis_server -a changeit
 
 # List all sessions
-KEYS myapp:*
+KEYS network:*
 
 # Get session details
-GET myapp:session_id
+GET network:session_id
 
 # Monitor real-time operations
 MONITOR
@@ -132,7 +132,7 @@ logger.debug('Redis SET operation:', { sid, ttl });
 
 2. **Session Not Found**
    - Verify TTL hasn't expired
-   - Check session prefix (default: 'myapp:')
+   - Check session prefix (default: 'network:')
    - Confirm Redis connection settings
 
 3. **Authentication Failed**

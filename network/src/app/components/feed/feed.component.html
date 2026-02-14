@@ -1,0 +1,150 @@
+<div class="feed-layout li-main-layout">
+  <!-- Left Sidebar -->
+  <aside class="feed-sidebar-left">
+    <div class="li-card profile-mini">
+      <div class="profile-mini__cover"></div>
+      <div class="profile-mini__info">
+        <mat-icon class="profile-mini__avatar">account_circle</mat-icon>
+        <h3>Bienvenue</h3>
+        <p>Développez votre réseau et votre carrière</p>
+      </div>
+      <div class="profile-mini__stats">
+        <div class="stat-row">
+          <span>Connexions</span>
+          <span class="stat-value">128</span>
+        </div>
+        <div class="stat-row">
+          <span>Vues du profil</span>
+          <span class="stat-value">45</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Feed -->
+  <main class="feed-main">
+    <!-- Create Post -->
+    <div class="li-card create-post">
+      <div class="create-post__top">
+        <mat-icon class="create-post__avatar">account_circle</mat-icon>
+        <input
+          type="text"
+          class="create-post__input"
+          placeholder="Commencer un post"
+          [(ngModel)]="newPostContent"
+          (keydown.enter)="createPost()"
+        />
+      </div>
+      <div class="create-post__actions">
+        <button class="create-post__action">
+          <mat-icon style="color: #378fe9">image</mat-icon>
+          <span>Photo</span>
+        </button>
+        <button class="create-post__action">
+          <mat-icon style="color: #5f9b41">videocam</mat-icon>
+          <span>Vidéo</span>
+        </button>
+        <button class="create-post__action">
+          <mat-icon style="color: #c37d16">event</mat-icon>
+          <span>Événement</span>
+        </button>
+        <button class="create-post__action">
+          <mat-icon style="color: #e16745">article</mat-icon>
+          <span>Article</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="feed-loading" *ngIf="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Posts -->
+    <div class="li-card post-card" *ngFor="let post of posts">
+      <div class="post-card__header">
+        <img [src]="post.author.avatar" [alt]="post.author.name" class="post-card__avatar" />
+        <div class="post-card__author">
+          <h4>{{ post.author.name }}</h4>
+          <p class="post-card__headline">{{ post.author.headline }}</p>
+          <span class="post-card__time">{{ timeAgo(post.createdAt) }} · <mat-icon class="post-card__globe">public</mat-icon></span>
+        </div>
+        <button class="li-btn li-btn--ghost li-btn--round post-card__more">
+          <mat-icon>more_horiz</mat-icon>
+        </button>
+      </div>
+
+      <div class="post-card__content">
+        <p>{{ post.content }}</p>
+        <img *ngIf="post.image" [src]="post.image" alt="Post image" class="post-card__image" />
+      </div>
+
+      <div class="post-card__stats">
+        <span class="post-card__likes" *ngIf="post.likes > 0">
+          <mat-icon class="like-icon">thumb_up</mat-icon> {{ post.likes }}
+        </span>
+        <span>
+          <span *ngIf="post.comments > 0">{{ post.comments }} commentaires</span>
+          <span *ngIf="post.comments > 0 && post.shares > 0"> · </span>
+          <span *ngIf="post.shares > 0">{{ post.shares }} partages</span>
+        </span>
+      </div>
+
+      <div class="post-card__actions">
+        <button class="post-action" [class.liked]="post.liked" (click)="toggleLike(post)">
+          <mat-icon>{{ post.liked ? 'thumb_up' : 'thumb_up_off_alt' }}</mat-icon>
+          <span>J'aime</span>
+        </button>
+        <button class="post-action">
+          <mat-icon>chat_bubble_outline</mat-icon>
+          <span>Commenter</span>
+        </button>
+        <button class="post-action">
+          <mat-icon>repeat</mat-icon>
+          <span>Republier</span>
+        </button>
+        <button class="post-action">
+          <mat-icon>send</mat-icon>
+          <span>Envoyer</span>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Right Sidebar -->
+  <aside class="feed-sidebar-right">
+    <div class="li-card news-widget">
+      <h3>Network Actualités</h3>
+      <ul class="news-list">
+        <li>
+          <span class="news-bullet">•</span>
+          <div>
+            <p class="news-title">Les tendances tech en 2025</p>
+            <span class="news-meta">il y a 2h · 1 234 lecteurs</span>
+          </div>
+        </li>
+        <li>
+          <span class="news-bullet">•</span>
+          <div>
+            <p class="news-title">L'IA transforme le recrutement</p>
+            <span class="news-meta">il y a 4h · 876 lecteurs</span>
+          </div>
+        </li>
+        <li>
+          <span class="news-bullet">•</span>
+          <div>
+            <p class="news-title">Télétravail : les nouvelles règles</p>
+            <span class="news-meta">il y a 6h · 2 345 lecteurs</span>
+          </div>
+        </li>
+        <li>
+          <span class="news-bullet">•</span>
+          <div>
+            <p class="news-title">Cybersécurité : risques émergents</p>
+            <span class="news-meta">il y a 8h · 567 lecteurs</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</div>

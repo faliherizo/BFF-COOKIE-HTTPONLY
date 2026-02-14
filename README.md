@@ -1,60 +1,95 @@
-# Angular BFF with Keycloak Authentication
+# Network - Plateforme Professionnelle
 
-Secure authentication implementation using Angular, Express.js BFF pattern, and Keycloak with complete client-side token isolation.
+Plateforme de réseautage professionnel inspirée de LinkedIn, implémentée avec Angular 19, Express.js (BFF pattern) et Keycloak pour l'authentification sécurisée.
 
-![bff_login](./assets/img/bff_login.png)
+## Aperçu
 
-## Key Features
+Network est une application de réseautage professionnel complète offrant :
+- Un **fil d'actualité** interactif avec publications, likes et commentaires
+- Un système de **messagerie** en temps réel entre utilisateurs
+- La gestion de **connexions** et suggestions de contacts
+- Des **notifications** pour rester informé des activités
+- Un **profil professionnel** détaillé (expérience, formation, compétences)
+- Des **paramètres** personnalisables (notifications, confidentialité, langue)
+- Une **page d'accueil statique** pour les visiteurs non connectés
+- Une **authentification sécurisée** via Keycloak (redirection, pas de popup)
 
-- 🔐 Complete client-side token isolation (BFF pattern)
-- 🌐 SSL/TLS encryption with custom CA
-- 📦 Session management (in-memory or Redis)
-- 🔄 Hot-reload development setup
-- 🐳 Full Docker support
+## Fonctionnalités
+
+### Frontend (Angular 19)
+| Page | Route | Description |
+|------|-------|-------------|
+| Accueil | `/` | Landing page avec présentation de la plateforme |
+| Connexion | `/login` | Page de connexion via Keycloak |
+| Fil d'actualité | `/feed` | Publications, création de posts, sidebar actualités |
+| Réseau | `/network` | Connexions, suggestions, invitations |
+| Messagerie | `/messaging` | Conversations en temps réel |
+| Notifications | `/notifications` | Activités et alertes |
+| Profil | `/profile` | Profil LinkedIn-style avec expérience et compétences |
+| Paramètres | `/settings` | Notifications, confidentialité, langue et thème |
+
+### Backend (Express.js BFF)
+| Endpoint | Méthode | Description |
+|----------|---------|-------------|
+| `/api/feed` | GET/POST | Récupérer/créer des publications |
+| `/api/feed/:id/like` | POST | Aimer une publication |
+| `/api/messages` | GET | Liste des conversations |
+| `/api/messages/:id` | GET/POST | Messages d'une conversation |
+| `/api/connections` | GET | Liste des connexions |
+| `/api/connections/suggestions` | GET | Suggestions de contacts |
+| `/api/notifications` | GET | Notifications |
+| `/api/settings` | GET/PUT | Paramètres utilisateur |
+| `/api/profile/extended` | GET | Profil complet |
+| `/auth/keycloak-init` | GET | Initier la connexion Keycloak |
+| `/auth/logout` | GET | Déconnexion |
 
 ## Architecture
 
-| Component | Technology | Port | Purpose |
-|-----------|------------|------|---------|
-| Frontend | Angular 19 | 4200 | Single Page Application |
-| Backend | Express.js | 3000 | Backend-For-Frontend (BFF) |
-| Keycloak | v26 | 8443 | Identity Provider |
-| Redis | v7 | 6379 | Session Store (optional) |
+| Composant | Technologie | Port | Rôle |
+|-----------|------------|------|------|
+| Frontend (network) | Angular 19 + Material | 4200 | Application SPA |
+| Backend (bff-network) | Express.js | 3000 | Backend-For-Frontend (BFF) |
+| Keycloak | v26 | 8443 | Fournisseur d'identité |
+| Redis | v7 | 6379 | Stockage de sessions |
 
-## Quick Start
+## Design
+
+Le design s'inspire de LinkedIn avec :
+- Palette de couleurs : bleu `#0a66c2`, fond gris `#f3f2ef`, cartes blanches
+- Navigation sticky avec icônes, badges et menu profil
+- Layout responsive avec grille adaptative (sidebar + contenu + widget)
+- Cartes avec ombres douces et coins arrondis
+
+## Démarrage rapide
 
 ```bash
-# Clone and enter project
-git clone https://github.com/brakmic/Angular-BFF-Keycloak
-cd Angular-BFF-Keycloak
-
-# Setup SSL certificates
+# Configurer les certificats SSL
 ./scripts/setup_ssl.sh
 
-# Start all services
+# Démarrer tous les services
 docker compose up -d
 ```
 
-Access the applications:
-- Frontend: https://frontend.local.com:4200
-- Backend: https://backend.local.com:3000
-- Keycloak: https://keycloak.local.com:8443
+Accès aux applications :
+- Frontend : https://frontend.local.com:4200
+- Backend : https://backend.local.com:3000
+- Keycloak : https://keycloak.local.com:8443
 
-## Prerequisites
+## Prérequis
 
 - Docker 20.10+
 - Node.js 18.x
 - OpenSSL
-- Local domain setup (see [Domain Setup](docs/DOMAINS.md))
+- Configuration des domaines locaux (voir [Configuration des domaines](docs/DOMAINS.md))
 
 ## Documentation
 
-- [Domain & SSL Setup](docs/DOMAINS.md)
-- [Session Management](docs/SESSIONS.md)
-- [Docker Configuration](docs/DOCKER.md)
-- [Development Guide](docs/DEVELOPMENT.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Configuration des domaines et SSL](docs/DOMAINS.md)
+- [Gestion des sessions](docs/SESSIONS.md)
+- [Configuration Docker](docs/DOCKER.md)
+- [Guide de développement](docs/DEVELOPMENT.md)
+- [Dépannage](docs/TROUBLESHOOTING.md)
 
-## License
+## Licence
 
 [MIT](./LICENSE)

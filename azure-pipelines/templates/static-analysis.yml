@@ -1,0 +1,67 @@
+stages:
+  - stage: StaticAnalysis
+    displayName: 'SAST - Analyse Statique'
+    dependsOn: QualityCheck
+    #condition: succeeded()
+    condition: and(succeeded(), eq(variables['control.analyse.statique'], 'true'))
+    jobs:
+      - job: RunSemgrep
+        displayName: 'Semgrep SAST Analysis'
+        timeoutInMinutes: 15
+        steps:
+          - script: |
+              pip install semgrep --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org
+              export PATH=$HOME/.local/bin:$PATH
+              mkdir -p $(Build.SourcesDirectory)/semgrep
+              semgrep scan --config p/java --json --output $(Build.SourcesDirectory)/semgrep-report.json
+              semgrep scan --config=p/owasp-top-ten --sarif-output=$(Build.SourcesDirectory)/semgrep/semgrep.sarif
+
+            displayName: 'Semgrep Scan + export SARIF'
+            continueOnError: true  
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: '$(Build.SourcesDirectory)/semgrep-report.json'
+              artifact: 'SemgrepReport'
+
+          - task: AdvancedSecurity-Publish@1
+            inputs:
+              SarifsInputDirectory: '$(Build.SourcesDirectory)/semgrep'
+              EnableRecursiveScanning: false
+              Category: 'Semgrep'
+            displayName: "Publish SARIF à Advanced Security"
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(Build.SourcesDirectory)/semgrep/semgrep.sarif'
+              ArtifactName: "CodeAnalysisLogs"
+            displayName: "Publish SARIF artifact (CodeAnalysisLogs)"
+
+
+      - job: RunSpotBugs
+        displayName: 'SpotBugs Static Analysis'
+        timeoutInMinutes: 15
+        steps:
+          - template: jdk-setup.yml
+          - task: MavenAuthenticate@0
+            inputs:
+              artifactsFeeds: 'DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-LAB'
+          - task: Maven@4
+            displayName: 'RunSpotBugs Scan'
+            inputs:
+              mavenPomFile: 'pom.xml'
+              goals: 'spotbugs:check'
+              mavenOptions: '-Xmx3072m -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '$(jdk.version.option)'
+              jdkArchitectureOption: '$(jdk.architecture)'
+            continueOnError: true
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: '$(System.DefaultWorkingDirectory)'
+              Contents: '**/target/spotbugsXml.xml'
+              ArtifactName: 'SpotBugsReport'
+            displayName: 'Publish SpotBugs Report'
+            condition: always()

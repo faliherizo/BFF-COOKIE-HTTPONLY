@@ -1,0 +1,68 @@
+stages:
+- stage: QualityCheck
+  displayName: 'Qualité, Tests Unitaires, Couverture'
+  condition: eq(variables['control.quality'], 'true')
+  jobs:
+  - job: UnitTestsAndAnalysis
+    displayName: 'Tests Unitaires & Analyse du Code'
+
+    steps:
+    - template: jdk-setup.yml
+
+    - task: Cache@2
+      displayName: 'Cache Maven'
+      inputs:
+        key: 'maven | "$(Agent.OS)" | pom.xml'
+        path: '$(HOME)/.m2/repository'
+
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-LAB'
+
+    - task: Maven@4
+      displayName: 'Tests Unitaires et Vérification'
+      timeoutInMinutes: 10
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'clean verify'
+        options: '-DnvdApiKey=$(NVD_API_KEY) -T 1C -DskipSite=true'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+
+    - task: Maven@4
+      displayName: 'Génération des Rapports (Qualité, Couverture, Analyse Statique)'
+      timeoutInMinutes: 20
+      condition: succeeded()
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'site'
+        options: '-DnvdApiKey=$(NVD_API_KEY) -T 1.5C -DskipTests=true -Dmdep.skip=true -Ddependency-check.skip=true'
+
+    - task: Maven@4
+      displayName: 'Analyse OWASP Dependency Check (Vulnérabilités)'
+      timeoutInMinutes: 20
+      condition: succeeded()
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'org.owasp:dependency-check-maven:check'
+        options: '-DnvdApiKey=$(NVD_API_KEY) -Ddependency-check.format=JSON,XML'
+      continueOnError: true
+
+    - task: PublishCodeCoverageResults@2
+      inputs:
+        codeCoverageTool: 'JaCoCo'
+        summaryFileLocation: '**/target/site/jacoco/jacoco.xml'
+        pathToSources: '$(System.DefaultWorkingDirectory)'
+        failIfCoverageEmpty: true
+
+#Publier les autres rapports (Spotbugs, PMD, Checkstyle) comme fichiers à télécharger
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/site/**'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)/Rapports'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/Rapports'
+        ArtifactName: 'RapportsQualiteCode'

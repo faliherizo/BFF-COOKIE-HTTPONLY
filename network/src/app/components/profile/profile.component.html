@@ -1,0 +1,82 @@
+<div class="profile-page li-container" *ngIf="!loading && profile">
+  <!-- Profile Header Card -->
+  <div class="li-card profile-header">
+    <div class="profile-cover" [style.background-image]="'url(' + profile.coverImage + ')'"></div>
+    <div class="profile-header__body">
+      <img [src]="profile.avatar" [alt]="profile.name" class="profile-avatar" />
+      <div class="profile-header__info">
+        <h1>{{ profile.name }}</h1>
+        <p class="profile-headline">{{ profile.headline }}</p>
+        <p class="profile-location">
+          <mat-icon>location_on</mat-icon> {{ profile.location }}
+          · <a href="javascript:void(0)">{{ profile.connections }}+ connexions</a>
+        </p>
+        <div class="profile-actions">
+          <button class="li-btn li-btn--primary">
+            <mat-icon>edit</mat-icon> Modifier le profil
+          </button>
+          <button class="li-btn li-btn--outline">
+            <mat-icon>share</mat-icon> Partager
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div class="li-card profile-section">
+    <h3>À propos</h3>
+    <p class="about-text">{{ profile.about }}</p>
+  </div>
+
+  <!-- Experience Section -->
+  <div class="li-card profile-section" *ngIf="profile.experience.length > 0">
+    <h3>Expérience</h3>
+    <div class="experience-list">
+      <div *ngFor="let exp of profile.experience" class="experience-item">
+        <mat-icon class="experience-icon">business</mat-icon>
+        <div class="experience-info">
+          <h4>{{ exp.title }}</h4>
+          <p class="company">{{ exp.company }}</p>
+          <p class="dates">
+            {{ exp.startDate }} - {{ exp.current ? 'Présent' : exp.endDate }}
+            · {{ exp.location }}
+          </p>
+          <p class="description">{{ exp.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Education Section -->
+  <div class="li-card profile-section" *ngIf="profile.education.length > 0">
+    <h3>Formation</h3>
+    <div class="education-list">
+      <div *ngFor="let edu of profile.education" class="education-item">
+        <mat-icon class="education-icon">school</mat-icon>
+        <div class="education-info">
+          <h4>{{ edu.school }}</h4>
+          <p>{{ edu.degree }}, {{ edu.field }}</p>
+          <p class="dates">{{ edu.startYear }} - {{ edu.endYear }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skills Section -->
+  <div class="li-card profile-section" *ngIf="profile.skills.length > 0">
+    <h3>Compétences</h3>
+    <div class="skills-grid">
+      <div *ngFor="let skill of profile.skills" class="skill-item">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ skill }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="profile-loading" *ngIf="loading">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Chargement du profil...</p>
+</div>

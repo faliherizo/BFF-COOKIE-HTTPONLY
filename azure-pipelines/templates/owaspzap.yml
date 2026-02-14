@@ -1,0 +1,59 @@
+jobs:
+  - job: OwaspZap
+    displayName: "DAST - Owsap ZAP"
+    condition: eq(variables['security.owaspzap'], 'true')
+    steps:
+      - task: Bash@3
+        displayName: "Préparation dossier ZAP"
+        inputs:
+          targetType: inline
+          script: |
+            mkdir -p $(Build.SourcesDirectory)/owaspzap/;
+            mkdir -p $(Build.SourcesDirectory)/owaspzap/rapport/
+
+      # Téléchargement de l'outil ZAP (Feed interne comme dans la référence)
+      - task: UniversalPackages@0
+        displayName: "Télécharger OWASP ZAP"
+        inputs:
+          command: "download"
+          downloadDirectory: "$(Build.SourcesDirectory)/owaspzap/"
+          feedsToUse: "internal"
+          vstsFeed: "5ad20022-dc6f-419d-956a-ed8e86e0a22d/33989028-d0a6-46e7-9480-93b8fb9fd807"
+          vstsFeedPackage: "91ae1060-8155-4615-9ea6-9c3261a34b99"
+          vstsPackageVersion: "2.14.0"
+
+      - task: Bash@3
+        displayName: "Exécution Scan ZAP"
+        inputs:
+          targetType: inline
+          script: |
+            cd $(Build.SourcesDirectory)/owaspzap/
+            tar -xvf ZAP_2.14.0_Linux.tar.gz;
+            tar -xvf $(Build.SourcesDirectory)/owaspzap/ZAP_2.14.0_Linux.tar.gz;
+            ls;
+            rm $(Build.SourcesDirectory)/owaspzap/ZAP_2.14.0_Linux.tar.gz;
+            cd ZAP_2.14.0;
+
+            # TODO: Mettre ici l'URL de votre application déployée en DEV
+            TARGET_URL="http://10.102.109.152:7024/accesalcool/index.faces"
+
+            echo "Lancement du scan ZAP sur $TARGET_URL"
+            # -cmd pour ligne de commande, -quickurl pour scan rapide
+            #./zap.sh -cmd -quickurl http://10.102.109.152:7024/accesalcool/index.faces -quickprogress -quickout $(Build.SourcesDirectory)/owaspzap/rapport/zap_report.html
+
+            ./zap.sh -cmd -quickurl $TARGET_URL -quickprogress -quickout $(Build.SourcesDirectory)/owaspzap/rapport/zap_report.html || true
+
+
+      - task: CopyFiles@2
+        displayName: 'Copie des fichiers du l''agent vers l''artifacts owaspzap'
+        condition: always()
+        inputs:
+          SourceFolder: '$(Build.SourcesDirectory)/owaspzap/rapport'
+          flattenFolders : true
+          TargetFolder: '$(Build.ArtifactStagingDirectory)/owaspzap'
+
+      - task: PublishBuildArtifacts@1
+        displayName: "Publication Rapport ZAP"
+        inputs:
+          PathtoPublish: "$(Build.SourcesDirectory)/owaspzap"
+          ArtifactName: "RapportSecuriteZAP"

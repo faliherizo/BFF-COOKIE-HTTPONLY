@@ -24,7 +24,7 @@ FE -> FE : NavbarComponent.constructor()\n→ Souscrit à authStateChanged\n→ 
 
 FE -> FE : AuthService.constructor()\n→ refreshSessionStatus()
 
-FE -> BFF : GET /api/profile\n(Cookie: angular-session=xxx)\n[withCredentials: true]
+FE -> BFF : GET /api/profile\n(Cookie: network-session=xxx)\n[withCredentials: true]
 activate BFF
 
 alt Session valide (cookie + session Redis existante)

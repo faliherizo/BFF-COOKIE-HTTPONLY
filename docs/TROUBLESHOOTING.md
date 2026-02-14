@@ -34,7 +34,7 @@
 1. **Install CA Certificate**
    ```bash
    # Linux
-   sudo cp certs/ca.cert.pem /usr/local/share/ca-certificates/mydevca.crt
+   sudo cp certs/ca.cert.pem /usr/local/share/ca-certificates/devca.crt
    sudo update-ca-certificates
 
    # macOS
@@ -76,13 +76,13 @@
    echo $HOST_WORKSPACE
 
    # Verify paths
-   ls -la ${HOST_WORKSPACE}/backend/certs
+   ls -la ${HOST_WORKSPACE}/bff-network/certs
    ```
 
 3. **Network Connectivity**
    ```bash
    # Test internal DNS
-   docker compose exec backend ping redis_server
+   docker compose exec bff-network ping redis_server
 
    # Check ports
    docker compose ps
@@ -113,10 +113,10 @@
 3. **Session Data Missing**
    ```bash
    # List all sessions
-   redis-cli -h redis_server -a changeit keys "myapp:*"
+   redis-cli -h redis_server -a changeit keys "network:*"
 
    # Check TTL
-   redis-cli -h redis_server -a changeit ttl "myapp:[session-id]"
+   redis-cli -h redis_server -a changeit ttl "network:[session-id]"
    ```
 
 ## Keycloak Issues
@@ -152,10 +152,10 @@
 1. **Hot Reload Not Working**
    ```bash
    # Check Angular logs
-   docker compose logs -f frontend
+   docker compose logs -f network
 
    # Verify volume mounts
-   docker compose exec frontend ls -la /app
+   docker compose exec network ls -la /app
    ```
 
 2. **Network Errors**
@@ -168,10 +168,10 @@
 1. **Server Not Starting**
    ```bash
    # Check Node.js logs
-   docker compose logs backend
+   docker compose logs bff-network
 
    # Verify environment
-   docker compose exec backend env
+   docker compose exec bff-network env
    ```
 
 2. **API Errors**

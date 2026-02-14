@@ -1,0 +1,155 @@
+// ─── Notifications Page Styles (LinkedIn-inspired) ──────────────────
+
+.notifications-page {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.notifications-layout {
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.notifications-card {
+  overflow: hidden;
+}
+
+.notifications-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--li-border);
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--li-text-primary);
+  }
+}
+
+.notifications-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px;
+}
+
+.notifications-list {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  border-bottom: 1px solid var(--li-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.03);
+  }
+
+  &.unread {
+    background-color: rgba(10, 102, 194, 0.05);
+
+    &:hover {
+      background-color: rgba(10, 102, 194, 0.08);
+    }
+  }
+}
+
+.notification-icon-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.notification-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.notification-type-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+
+  mat-icon {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+    color: white;
+  }
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-message {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--li-text-primary);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: var(--li-text-muted);
+}
+
+.unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--li-blue);
+  flex-shrink: 0;
+}
+
+// ─── Empty State ────────────────────────────────────────────────────
+.notifications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--li-text-secondary);
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--li-text-muted);
+    margin-bottom: 16px;
+  }
+
+  h4 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--li-text-primary);
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+}

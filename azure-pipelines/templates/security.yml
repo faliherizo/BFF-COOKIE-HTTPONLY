@@ -1,0 +1,12 @@
+stages:
+- stage: SecurityCheck
+  displayName: 'Analyse de Sécurité (SCA/SAST)'
+  dependsOn: QualityCheck
+  #condition: succeeded()
+  condition: and(succeeded(), eq(variables['control.security'], 'true'))
+  #condition: eq(variables['control.security'], 'true')
+  jobs:
+    - template: github-advanced-security.yml
+    - template: owasp-dependency-check.yml
+    - template: snyk.yml
+    - template: owaspzap.yml

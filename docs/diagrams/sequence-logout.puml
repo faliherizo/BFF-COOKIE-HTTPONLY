@@ -26,7 +26,7 @@ deactivate FE
 == 2. Déconnexion locale + SSO Keycloak ==
 
 activate Popup
-Popup -> BFF : GET /auth/logout\n(Cookie: angular-session=...)
+Popup -> BFF : GET /auth/logout\n(Cookie: network-session=...)
 activate BFF
 BFF -> BFF : req.isAuthenticated() → true
 BFF -> BFF : Récupère id_token\ndepuis la session utilisateur
@@ -50,7 +50,7 @@ BFF -> BFF : req.logout()\n(Passport.js déconnexion)
 BFF -> BFF : req.session.destroy()
 BFF -> Redis : DEL session:{sessionId}
 Redis --> BFF : OK
-BFF -> BFF : res.clearCookie('angular-session')
+BFF -> BFF : res.clearCookie('network-session')
 BFF --> Popup : HTML/JS :\nwindow.opener.postMessage(\n  {type: 'LOGOUT_SUCCESS',\n   reason: 'KEYCLOAK_LOGOUT_DONE'}\n);\nwindow.close();
 deactivate BFF
 

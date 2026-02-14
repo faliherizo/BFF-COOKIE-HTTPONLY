@@ -1,0 +1,34 @@
+<div class="login-page">
+  <div class="login-card li-card">
+    <div class="login-card__header">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" fill="#0a66c2">
+        <path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"></path>
+      </svg>
+      <h1>Se connecter</h1>
+      <p>Restez informé de votre réseau professionnel</p>
+    </div>
+
+    <div class="login-card__body">
+      <button class="login-card__btn login-card__btn--primary" (click)="login()">
+        <mat-icon>login</mat-icon>
+        Se connecter avec Keycloak
+      </button>
+
+      <div class="login-card__divider">
+        <span>ou</span>
+      </div>
+
+      <button class="login-card__btn login-card__btn--outline" (click)="login()">
+        <mat-icon>mail</mat-icon>
+        Connexion par email
+      </button>
+    </div>
+
+    <div class="login-card__footer">
+      <p>
+        Pas encore membre ? 
+        <a (click)="login()" class="login-card__link">S'inscrire maintenant</a>
+      </p>
+    </div>
+  </div>
+</div>

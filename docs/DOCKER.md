@@ -23,10 +23,10 @@ If you prefer not to use environment variables, modify docker-compose.yaml:
 ```yaml
 volumes:
   # Instead of:
-  - ${HOST_WORKSPACE}/backend:/app
+  - ${HOST_WORKSPACE}/bff-network:/app
   
   # Use:
-  - ./backend:/app
+  - ./bff-network:/app
 ```
 
 ## Component Services
@@ -47,28 +47,28 @@ volumes:
 ```yaml
 // filepath: /host_workspace/docker-compose.yaml
 services:
-  frontend:
+  network:
     build:
-      context: ./frontend
+      context: ./network
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: ${HOST_WORKSPACE}/frontend
+        source: ${HOST_WORKSPACE}/network
         target: /app
       - type: volume
-        source: frontend_node_modules
+        source: network_node_modules
         target: /app/node_modules
 
-  backend:
+  bff-network:
     build:
-      context: ./backend
+      context: ./bff-network
       dockerfile: Dockerfile
     volumes:
       - type: bind
-        source: ${HOST_WORKSPACE}/backend
+        source: ${HOST_WORKSPACE}/bff-network
         target: /app
       - type: volume
-        source: backend_node_modules
+        source: bff_network_node_modules
         target: /app/node_modules
 
   # Other services...
@@ -83,7 +83,7 @@ services:
 docker compose up -d
 
 # Start specific service
-docker compose up -d backend
+docker compose up -d bff-network
 
 # Build and start
 docker compose up -d --build
@@ -96,7 +96,7 @@ docker compose up -d --build
 docker compose logs -f
 
 # View specific service
-docker compose logs -f backend
+docker compose logs -f bff-network
 
 # Check service status
 docker compose ps
@@ -113,7 +113,7 @@ Both frontend and backend support hot reloading:
 
 ```bash
 # Restart service
-docker compose restart backend
+docker compose restart bff-network
 
 # Stop all services
 docker compose down
@@ -134,16 +134,16 @@ volumes:
   postgres_data:    # Keycloak database
   test_data:       # Keycloak test data
   redis_data:      # Redis persistence
-  frontend_node_modules:  # Frontend dependencies
-  backend_node_modules:   # Backend dependencies
+  network_node_modules:  # Frontend dependencies
+  bff_network_node_modules:   # BFF dependencies
 ```
 
 ### Bind Mounts
 
 ```yaml
 volumes:
-  - ${HOST_WORKSPACE}/frontend:/app   # Source code
-  - ${HOST_WORKSPACE}/backend:/app    # Source code
+  - ${HOST_WORKSPACE}/network:/app   # Source code
+  - ${HOST_WORKSPACE}/bff-network:/app    # Source code
   - ${HOST_WORKSPACE}/certs:/app/certs:ro  # Certificates
 ```
 
@@ -197,16 +197,16 @@ ls -la ${HOST_WORKSPACE}
 2. **Container Fails to Start**
 ```bash
 # Check detailed logs
-docker compose logs --tail=100 backend
+docker compose logs --tail=100 bff-network
 
 # Inspect container
-docker compose exec backend sh
+docker compose exec bff-network sh
 ```
 
 3. **Network Issues**
 ```bash
 # Test internal DNS
-docker compose exec backend ping redis_server
+docker compose exec bff-network ping redis_server
 
 # Check network
 docker network inspect devnetwork
@@ -216,7 +216,7 @@ docker network inspect devnetwork
 
 ```bash
 # Shell access
-docker compose exec backend sh
+docker compose exec bff-network sh
 
 # Process list
 docker compose top

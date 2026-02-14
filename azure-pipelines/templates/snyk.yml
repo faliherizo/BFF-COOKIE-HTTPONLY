@@ -1,0 +1,62 @@
+jobs:
+  - job: SnykScan
+    displayName: "SCA-SAST Snyk Security Scan"
+    condition: eq(variables['security.snyk'], 'true')
+    steps:
+
+      # Authentification Maven nécessaire pour les dépendances privées
+      - task: MavenAuthenticate@0
+        displayName: "Authentification Maven"
+        inputs:
+          artifactsFeeds: 'DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-LAB'
+
+      - task: SnykSecurityScan@1
+        inputs:
+          serviceConnectionEndpoint: 'snyk'
+          testType: 'app'
+          monitorWhen: 'always'
+          failOnIssues: false
+
+      - task: Bash@3
+        displayName: "Snyk Scan (SCA & SAST)"
+        env:
+          SNYK_TOKEN: $(SNYK_TOKEN)
+        inputs:
+          targetType: "inline"
+          script: |
+            echo "--- 1. Téléchargement de Snyk CLI ---"
+            # Utilisation de curl -k pour contourner les problèmes de certificats proxy
+            curl -kLo ./snyk "https://github.com/snyk/snyk/releases/download/v1.1290.0/snyk-linux"
+            chmod +x ./snyk
+
+            echo "--- 2. Authentification ---"
+            ./snyk auth $SNYK_TOKEN
+
+            mkdir -p snyk-reports
+
+            echo "--- 3. Snyk Open Source (Dépendances) ---"
+            # --insecure pour le proxy, --all-projects pour le multi-module
+            ./snyk test --all-projects --insecure --json > snyk-reports/snyk-opensource.json || true
+
+            echo "--- 4. Snyk Code (Analyse Statique SAST) ---"
+            # Ajout par rapport à votre ancien pipeline, présent dans la référence
+            ./snyk code test --all-projects --insecure --json > snyk-reports/snyk-code.json || true
+
+            echo "--- 5. Snyk Monitor (Dashboard) ---"
+            ./snyk monitor --all-projects --insecure || true
+
+            echo "--- 6. Génération Rapports HTML ---"
+            if command -v npm &> /dev/null; then
+                npm config set strict-ssl false
+                npm install -g snyk-to-html
+                cat snyk-reports/snyk-opensource.json | snyk-to-html -o snyk-reports/snyk-opensource.html
+                cat snyk-reports/snyk-code.json | snyk-to-html -o snyk-reports/snyk-code.html
+            else
+                echo "WARNING: NPM non trouvé. Rapports HTML non générés."
+            fi
+
+      - task: PublishBuildArtifacts@1
+        displayName: "Publication Rapports Snyk"
+        inputs:
+          PathtoPublish: "snyk-reports"
+          ArtifactName: "RapportsSecuriteSnyk"

@@ -1,0 +1,60 @@
+steps:
+  # ---------------------------------------------------------------------------------------------------------
+  # Copie du JDK cible vers l'agent du VMSS
+
+  - task: Bash@3
+    displayName: Azure CLI - Copie de Oracle JDK $(jdk.version.exacte) du blob vers l'agent
+    inputs:
+      targetType: 'inline'
+      script: |
+        mkdir -p $(Build.SourcesDirectory)/$(dossier.jdk)
+        az storage blob download --account-name $(blob.name) --account-key $(blob.key) --container-name $(blob.container) --name jdk-$(jdk.version.exacte)_linux-x64_bin.tar.gz --file $(Build.SourcesDirectory)/$(dossier.jdk)/jdk-$(jdk.version.exacte)_linux-x64_bin.tar.gz
+
+  # ---------------------------------------------------------------------------------------------------------
+  # Cibler la version de JDK désirée et configurer le JAVA_HOME
+
+  - task: JavaToolInstaller@0
+    displayName: 'Installation du JDK cible'
+    inputs:
+      versionSpec: '$(jdk.version.courte)'
+      jdkArchitectureOption: '$(jdk.architecture)'
+      jdkSourceOption: 'LocalDirectory'
+      jdkFile: '$(Build.SourcesDirectory)/$(dossier.jdk)/jdk-$(jdk.version.exacte)_linux-$(jdk.architecture)_bin.tar.gz'
+      jdkDestinationDirectory: '$(agent.toolsDirectory)/jdk$(jdk.version.courte)'
+      cleanDestinationDirectory: true
+      createExtractDirectory: false
+
+  # ---------------------------------------------------------------------------------------------------------
+  # Préparation pre-compilation comme enlever les fichiers conflictuels entre le poste développeur et l'agent de build
+
+  - task: Bash@3
+    displayName: 'Set Java Home et préparation pre-compilation'
+    inputs:
+      targetType: 'inline'
+      script: |
+        # Le système est configuré pour utiliser le paramètre "<executable>${env.JAVA_VERSION_HOME}/bin/javac</executable>" dans le "maven-compiler-plugin"
+        echo "La variable "JAVA_HOME" et "JAVA_VERSION_HOME" seront créées dans l'écran des variables du Pipeline Azure"
+        export JAVA_HOME=$(agent.toolsDirectory)/jdk$(jdk.version.courte)
+        export JAVA_$(jdk.version.courte)_HOME=$(agent.toolsDirectory)/jdk$(jdk.version.courte)
+        echo "JAVA_HOME = $JAVA_HOME"
+        echo "JAVA_$(jdk.version.courte)_HOME = $JAVA_$(jdk.version.courte)_HOME"
+        echo "Supprimer le dossier .mvn qui contient des configurations du côté du développeur en conflit avec la Pipeline Azure Devops"
+        rm -rf .mvn
+        java -version
+        echo "##vso[task.setvariable variable=JAVA_HOME]$(JAVA_HOME_$(jdk.version.courte)_$(jdk.architecture))"
+        echo "##vso[task.setvariable variable=JAVA_$(jdk.version.courte)_HOME]$(JAVA_HOME_$(jdk.version.courte)_$(jdk.architecture))"
+        echo "##vso[task.setvariable variable=PATH]$(JAVA_HOME)/bin:$(PATH)"
+
+  # ---------------------------------------------------------------------------------------------------------
+  # Installation OpenSSL et les certificats
+
+  - task: Bash@3
+    displayName: 'Installation OpenSSL et les certificats'
+    inputs:
+      targetType: 'inline'
+      script: |
+        sudo apt-get install openssl
+        sudo apt-get install ca-certificates
+        sudo dpkg-reconfigure ca-certificates
+        sudo update-ca-certificates
+

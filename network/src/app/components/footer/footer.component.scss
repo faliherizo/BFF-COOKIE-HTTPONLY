@@ -1,0 +1,61 @@
+// ─── Footer Styles (LinkedIn-inspired) ──────────────────────────────
+
+.li-footer {
+  background-color: white;
+  border-top: 1px solid var(--li-border);
+  padding: 16px 0;
+  margin-top: auto;
+}
+
+.li-footer__inner {
+  max-width: var(--li-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.li-footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  
+  span {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--li-blue);
+  }
+}
+
+.li-footer__links {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  a {
+    font-size: 12px;
+    color: var(--li-text-secondary);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+      color: var(--li-blue);
+    }
+  }
+}
+
+.li-footer__copy {
+  font-size: 12px;
+  color: var(--li-text-muted);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .li-footer__inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

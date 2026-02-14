@@ -19,9 +19,9 @@ activate FE
 FE -> FE : authGuard vérifie\nAuthService.isAuthenticated()\n→ true
 FE -> FE : ProfileComponent.ngOnInit()\nfetchProfile()
 
-FE -> BFF : GET /api/profile\n(Cookie: angular-session=xxx)\n[WithCredentialsInterceptor\najoute withCredentials: true]
+FE -> BFF : GET /api/profile\n(Cookie: network-session=xxx)\n[WithCredentialsInterceptor\najoute withCredentials: true]
 activate BFF
-BFF -> BFF : express-session middleware\nLit le cookie "angular-session"
+BFF -> BFF : express-session middleware\nLit le cookie "network-session"
 BFF -> Redis : GET session:{sessionId}
 Redis --> BFF : Session data\n{user, tokens, ...}
 BFF -> BFF : passport.session()\nDésérialise l'utilisateur
@@ -61,7 +61,7 @@ activate FE
 FE -> FE : authGuard → true
 FE -> FE : TransactionsComponent.ngOnInit()
 
-FE -> BFF : GET /api/transactions\n(Cookie: angular-session=xxx)
+FE -> BFF : GET /api/transactions\n(Cookie: network-session=xxx)
 activate BFF
 BFF -> Redis : GET session:{sessionId}
 Redis --> BFF : Session data
@@ -81,7 +81,7 @@ activate FE
 FE -> FE : authGuard → true
 FE -> FE : ProductListComponent.ngOnInit()
 
-FE -> BFF : GET /api/products\n(Cookie: angular-session=xxx)
+FE -> BFF : GET /api/products\n(Cookie: network-session=xxx)
 activate BFF
 BFF -> Redis : GET session:{sessionId}
 Redis --> BFF : Session data

@@ -1,4 +1,4 @@
-# Architecture du Projet Angular-BFF-Keycloak
+# Architecture du Projet BFF Network
 
 ## 1. Vue d'ensemble
 
@@ -25,6 +25,7 @@ Ce projet implémente le pattern **Backend-For-Frontend (BFF)** pour sécuriser 
 |-----------|------------|------|------|
 | **Frontend** | Angular 19 + Material | 4200 | SPA - Interface utilisateur |
 | **Backend (BFF)** | Express.js + Passport.js | 3000 | Proxy d'authentification, API gateway |
+| **Backend (API)** | Java Spring Boot | 8080 | API métier (logique business) |
 | **Keycloak** | Keycloak v26.1 | 8443 | Fournisseur d'identité (IdP) OAuth2/OIDC |
 | **Redis** | Redis 7.0 | 6379 | Stockage des sessions (optionnel, sinon in-memory) |
 | **PostgreSQL** | PostgreSQL 15 | 5432 | Base de données Keycloak |
@@ -35,7 +36,7 @@ Ce projet implémente le pattern **Backend-For-Frontend (BFF)** pour sécuriser 
 ### 3.1 Structure des modules
 
 ```
-frontend/src/app/
+network/src/app/
 ├── app.component.ts          # Composant racine (Navbar + RouterOutlet + Footer)
 ├── app.config.ts             # Configuration (APP_SETTINGS injection token)
 ├── app.routes.ts             # Définition des routes avec métadonnées de navigation
@@ -87,7 +88,7 @@ Le fichier `proxy.conf.json` redirige `/api/*` et `/auth/*` vers le backend (`ht
 ### 4.1 Structure des modules
 
 ```
-backend/src/
+bff-network/src/
 ├── index.ts                    # Point d'entrée : HTTPS server + vérifications runtime
 ├── app.ts                      # Configuration Express (CORS, sessions, Passport, routes)
 ├── logger.ts                   # Winston logger
@@ -119,7 +120,7 @@ backend/src/
 1. **Trust Proxy** — `app.set('trust proxy', true)`
 2. **Morgan Logger** — Logging HTTP combiné via Winston
 3. **CORS** — Origine autorisée : `COOKIE_ORIGIN`, credentials activés
-4. **Session** — Cookie `angular-session`, sécurisé, HttpOnly, SameSite=None, TTL 15min
+4. **Session** — Cookie `network-session`, sécurisé, HttpOnly, SameSite=None, TTL 15min
 5. **Debug Middleware** — Logging des détails de requête
 6. **Passport Initialize** — Initialisation de Passport.js
 7. **Passport Session** — Désérialisation de session Passport
@@ -171,7 +172,7 @@ backend/src/
 
 - **Store par défaut** : In-memory
 - **Store optionnel** : Redis (activé via `SESSION_STORE=redis`)
-- **Cookie** : `angular-session`, secure, HttpOnly, SameSite=None
+- **Cookie** : `network-session`, secure, HttpOnly, SameSite=None
 - **TTL** : 15 minutes (rolling)
 - **Debug** : `DebugRedisStore` wrapper avec logging des opérations GET/SET
 
@@ -181,8 +182,9 @@ backend/src/
 
 ```yaml
 services:
-  frontend      → Angular app (Dockerfile dans frontend/)
-  backend       → Express.js BFF (Dockerfile dans backend/)
+  network       → Angular app (Dockerfile dans network/)
+  bff-network   → Express.js BFF (Dockerfile dans bff-network/)
+  backend       → Java Spring Boot API (Dockerfile dans backend/)
   keycloak      → Keycloak v26.1 (image officielle)
   postgres      → PostgreSQL 15 (persistence Keycloak)
   redis         → Redis 7.0-alpine (sessions)
@@ -199,8 +201,8 @@ Tous les services communiquent via le réseau Docker `devnetwork` (bridge).
 |--------|-------|
 | `postgres_data` | Données PostgreSQL (Keycloak) |
 | `redis_data` | Données Redis (sessions) |
-| `frontend_node_modules` | node_modules du frontend |
-| `backend_node_modules` | node_modules du backend |
+| `network_node_modules` | node_modules du frontend |
+| `bff_network_node_modules` | node_modules du BFF |
 | `test_data` | Données Keycloak |
 | `import_dir` | Import du realm Keycloak |
 

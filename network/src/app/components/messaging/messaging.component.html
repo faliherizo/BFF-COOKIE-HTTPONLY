@@ -1,0 +1,95 @@
+<div class="messaging-container">
+  <!-- Conversations List -->
+  <div class="li-card conversations-panel">
+    <div class="conversations-header">
+      <h3>Messagerie</h3>
+      <button class="li-btn li-btn--ghost li-btn--round">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+
+    <div class="conversations-search">
+      <mat-icon>search</mat-icon>
+      <input type="text" placeholder="Rechercher dans les messages" />
+    </div>
+
+    <div class="conversations-loading" *ngIf="loading">
+      <mat-spinner diameter="30"></mat-spinner>
+    </div>
+
+    <div class="conversations-list" *ngIf="!loading">
+      <div
+        *ngFor="let conv of conversations"
+        class="conversation-item"
+        [class.active]="selectedConversation?.id === conv.id"
+        [class.unread]="conv.unreadCount > 0"
+        (click)="selectConversation(conv)"
+      >
+        <div class="conversation-avatar-wrapper">
+          <img [src]="conv.participant.avatar" [alt]="conv.participant.name" class="conversation-avatar" />
+          <span class="online-dot" *ngIf="conv.participant.online"></span>
+        </div>
+        <div class="conversation-info">
+          <div class="conversation-top">
+            <span class="conversation-name">{{ conv.participant.name }}</span>
+            <span class="conversation-time">{{ timeAgo(conv.lastMessageTime) }}</span>
+          </div>
+          <p class="conversation-preview">{{ conv.lastMessage }}</p>
+        </div>
+        <span class="unread-badge" *ngIf="conv.unreadCount > 0">{{ conv.unreadCount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Panel -->
+  <div class="li-card chat-panel" *ngIf="selectedConversation">
+    <div class="chat-header">
+      <img [src]="selectedConversation.participant.avatar" [alt]="selectedConversation.participant.name" class="chat-avatar" />
+      <div class="chat-header-info">
+        <h4>{{ selectedConversation.participant.name }}</h4>
+        <p>{{ selectedConversation.participant.headline }}</p>
+      </div>
+      <div class="chat-header-actions">
+        <button class="li-btn li-btn--ghost li-btn--round"><mat-icon>videocam</mat-icon></button>
+        <button class="li-btn li-btn--ghost li-btn--round"><mat-icon>more_horiz</mat-icon></button>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <div class="chat-loading" *ngIf="loadingMessages">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+      <div *ngFor="let msg of messages" class="message" [class.sent]="msg.sender.name === 'Vous'">
+        <img *ngIf="msg.sender.name !== 'Vous'" [src]="msg.sender.avatar" class="message-avatar" />
+        <div class="message-bubble">
+          <p>{{ msg.content }}</p>
+          <span class="message-time">{{ timeAgo(msg.timestamp) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        placeholder="Écrivez un message..."
+        [(ngModel)]="newMessage"
+        (keydown.enter)="sendMessage()"
+      />
+      <div class="chat-input-actions">
+        <button class="li-btn li-btn--ghost li-btn--round"><mat-icon>image</mat-icon></button>
+        <button class="li-btn li-btn--ghost li-btn--round"><mat-icon>attach_file</mat-icon></button>
+        <button class="li-btn li-btn--ghost li-btn--round"><mat-icon>emoji_emotions</mat-icon></button>
+        <button class="li-btn li-btn--primary li-btn--round" (click)="sendMessage()" [disabled]="!newMessage.trim()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="li-card chat-panel chat-empty" *ngIf="!selectedConversation && !loading">
+    <mat-icon class="empty-icon">forum</mat-icon>
+    <h3>Sélectionnez une conversation</h3>
+    <p>Choisissez une conversation dans la liste pour commencer à discuter.</p>
+  </div>
+</div>

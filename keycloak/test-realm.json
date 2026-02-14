@@ -1,6 +1,6 @@
 {
   "id": "5a64bff1-4c6f-4ec2-ae1c-249102bbce41",
-  "realm": "TestRealm",
+  "realm": "NetworkRealm",
   "enabled": true,
   "notBefore": 0,
   "defaultSignatureAlgorithm": "RS256",
@@ -24,7 +24,7 @@
   ],
   "clients": [
     {
-      "clientId": "angular-public-client",
+      "clientId": "network-client",
       "name": "Angular OIDC Client",
       "description": "",
       "rootUrl": "",

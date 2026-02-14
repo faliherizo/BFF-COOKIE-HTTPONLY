@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--li-bg);
+}
+
+.app-main {
+  flex: 1;
+  
+  &.authenticated {
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+}
+
+.app-container {
+  width: 100%;
+  
+  &.li-container {
+    max-width: var(--li-max-width);
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+}

@@ -1,0 +1,47 @@
+jobs:
+  - job: githubAS
+    displayName: "DAST - GitHub Advanced Security"
+    condition: eq(variables['security.github-advanced-security'], 'true')
+    steps:
+      - template: jdk-setup.yml
+
+    # Cache Maven
+
+      - task: Cache@2
+        displayName: 'Cache des dépendances Maven'
+        inputs:
+          key: 'maven | "$(Agent.OS)" | pom.xml'
+          path: '$(HOME)/.m2/repository'
+
+      - task: MavenAuthenticate@0
+        inputs:
+          artifactsFeeds: 'DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-LAB'
+
+      - task: Bash@3
+        displayName: "Préparation du dossier Advanced Security"
+        inputs:
+          targetType: inline
+          script: |
+            mkdir -p $(Build.SourcesDirectory)/githubas/;
+            mkdir -p $(Build.SourcesDirectory)/githubas/rapport/
+
+
+      # 1) CodeQL init (choisis le langage)
+      - task: AdvancedSecurity-Codeql-Init@1
+        inputs:
+          languages: 'java'
+          enableAutomaticCodeQLInstall: true
+          ram: 3072
+
+      # 2) Build (tu peux utiliser Autobuild ou ton mvn)
+      # Option A: autobuild
+      #- task: AdvancedSecurity-Codeql-Autobuild@1
+
+      # Option B (recommandé si ton build est spécifique): remplace Autobuild par :
+      - bash: mvn -B clean package -DskipTests
+
+      # 3) Dependency scanning (SCA)
+      - task: AdvancedSecurity-Dependency-Scanning@1
+
+      # 4) Analyse CodeQL (publie les alertes)
+      - task: AdvancedSecurity-Codeql-Analyze@1

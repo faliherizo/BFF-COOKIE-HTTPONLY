@@ -1,0 +1,138 @@
+<div class="settings-page li-container">
+  <div class="settings-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="li-card settings-nav">
+      <h3>Paramètres</h3>
+      <ul>
+        <li class="active">
+          <mat-icon>notifications</mat-icon> Notifications
+        </li>
+        <li>
+          <mat-icon>lock</mat-icon> Confidentialité
+        </li>
+        <li>
+          <mat-icon>language</mat-icon> Langue
+        </li>
+        <li>
+          <mat-icon>palette</mat-icon> Apparence
+        </li>
+        <li>
+          <mat-icon>security</mat-icon> Sécurité
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Settings Content -->
+    <main class="settings-content">
+      <div class="settings-loading" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <div *ngIf="!loading && userSettings">
+        <!-- Notifications Section -->
+        <section class="li-card settings-section">
+          <h3><mat-icon>notifications</mat-icon> Notifications</h3>
+          <p class="section-desc">Gérez vos préférences de notification</p>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Notifications par email</h4>
+              <p>Recevez des mises à jour importantes par email</p>
+            </div>
+            <mat-slide-toggle [(ngModel)]="userSettings.notifications.email" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Notifications push</h4>
+              <p>Recevez des notifications en temps réel sur votre appareil</p>
+            </div>
+            <mat-slide-toggle [(ngModel)]="userSettings.notifications.push" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Notifications SMS</h4>
+              <p>Recevez des alertes par SMS pour les activités importantes</p>
+            </div>
+            <mat-slide-toggle [(ngModel)]="userSettings.notifications.sms" color="primary"></mat-slide-toggle>
+          </div>
+        </section>
+
+        <!-- Privacy Section -->
+        <section class="li-card settings-section">
+          <h3><mat-icon>lock</mat-icon> Confidentialité</h3>
+          <p class="section-desc">Contrôlez qui peut voir vos informations</p>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Visibilité du profil</h4>
+              <p>Choisissez qui peut voir votre profil</p>
+            </div>
+            <select [(ngModel)]="userSettings.privacy.profileVisibility" class="setting-select">
+              <option value="public">Tout le monde</option>
+              <option value="connections">Mes connexions</option>
+              <option value="private">Personne</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Afficher l'adresse email</h4>
+              <p>Permettre aux autres de voir votre adresse email</p>
+            </div>
+            <mat-slide-toggle [(ngModel)]="userSettings.privacy.showEmail" color="primary"></mat-slide-toggle>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Afficher le numéro de téléphone</h4>
+              <p>Permettre aux autres de voir votre numéro de téléphone</p>
+            </div>
+            <mat-slide-toggle [(ngModel)]="userSettings.privacy.showPhone" color="primary"></mat-slide-toggle>
+          </div>
+        </section>
+
+        <!-- Language & Theme Section -->
+        <section class="li-card settings-section">
+          <h3><mat-icon>language</mat-icon> Langue et apparence</h3>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Langue</h4>
+              <p>Choisissez la langue de l'interface</p>
+            </div>
+            <select [(ngModel)]="userSettings.language" class="setting-select">
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <h4>Thème</h4>
+              <p>Choisissez l'apparence de l'application</p>
+            </div>
+            <select [(ngModel)]="userSettings.theme" class="setting-select">
+              <option value="light">Clair</option>
+              <option value="dark">Sombre</option>
+              <option value="system">Système</option>
+            </select>
+          </div>
+        </section>
+
+        <!-- Save Button -->
+        <div class="settings-actions">
+          <button class="li-btn li-btn--primary" (click)="saveSettings()" [disabled]="saving">
+            {{ saving ? 'Enregistrement...' : 'Enregistrer les modifications' }}
+          </button>
+          <span class="save-success" *ngIf="saved">
+            <mat-icon>check_circle</mat-icon> Modifications enregistrées
+          </span>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

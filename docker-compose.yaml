@@ -1,19 +1,19 @@
 services:
-  # Frontend Angular app
-  frontend:
+  # Frontend Network app (Angular)
+  network:
     build:
-      context: ./frontend
+      context: ./network
       dockerfile: Dockerfile
-    container_name: angular_frontend
+    container_name: network_frontend
     volumes:
       - type: bind
-        source: ${HOST_WORKSPACE}/frontend
+        source: ${HOST_WORKSPACE}/network
         target: /app
       - type: volume
-        source: frontend_node_modules
+        source: network_node_modules
         target: /app/node_modules
       - type: bind
-        source: ${HOST_WORKSPACE}/frontend/certs
+        source: ${HOST_WORKSPACE}/network/certs
         target: /app/certs
         read_only: true
     ports:
@@ -23,23 +23,23 @@ services:
     networks:
       - devnetwork
     depends_on:
-      - backend
+      - bff-network
 
-  # Backend Express.js app
-  backend:
+  # BFF Network (Express.js – Auth + Proxy)
+  bff-network:
     build:
-      context: ./backend
+      context: ./bff-network
       dockerfile: Dockerfile
-    container_name: express_backend
+    container_name: bff_network
     volumes:
       - type: bind
-        source: ${HOST_WORKSPACE}/backend
+        source: ${HOST_WORKSPACE}/bff-network
         target: /app
       - type: volume
-        source: backend_node_modules
+        source: bff_network_node_modules
         target: /app/node_modules
       - type: bind
-        source: ${HOST_WORKSPACE}/backend/certs
+        source: ${HOST_WORKSPACE}/bff-network/certs
         target: /app/certs
         read_only: true
     ports:
@@ -47,11 +47,27 @@ services:
     environment:
       - NODE_TLS_REJECT_UNAUTHORIZED=0
       - SESSION_STORE=redis
+      - BACKEND_API_URL=http://backend-api:8080
     networks:
       - devnetwork
     depends_on:
       - keycloak
       - redis
+      - backend-api
+
+  # Java Spring Boot Backend (Business Logic)
+  backend-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: network_backend_api
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - devnetwork
+    restart: unless-stopped
 
   redis:
     extends:
@@ -91,5 +107,5 @@ volumes:
   test_data:
   import_dir:
   redis_data:
-  frontend_node_modules:
-  backend_node_modules:
+  network_node_modules:
+  bff_network_node_modules:

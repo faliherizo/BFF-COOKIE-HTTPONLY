@@ -82,14 +82,14 @@ The setup uses an external Docker network named `devnetwork`. This allows:
 // For devcontainer
 const config = {
   authServerURL: 'https://keycloak:8443',
-  realm: 'TestRealm',
+  realm: 'NetworkRealm',
   // ... other settings
 };
 
 // For local development
 const config = {
   authServerURL: 'https://keycloak.local.com:8443',
-  realm: 'TestRealm',
+  realm: 'NetworkRealm',
   // ... other settings
 };
 ```

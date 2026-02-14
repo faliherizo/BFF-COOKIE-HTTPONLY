@@ -1,0 +1,73 @@
+jobs:
+  - job: DependencyScan
+    displayName: 'SCA - Owasp Dependency Check'
+    condition: eq(variables['security.owasp-dependency-check'], 'true')
+    
+    steps:
+    - template: jdk-setup.yml
+
+    # Cache Maven
+    - task: Cache@2
+      displayName: 'Cache des dépendances Maven'
+      inputs:
+        key: 'maven | "$(Agent.OS)" | pom.xml'
+        path: '$(HOME)/.m2/repository/org/owasp/dependency-check-data/'
+
+    - task: MavenAuthenticate@0
+      inputs:
+        artifactsFeeds: 'DGATI-ARTEFACTS-ARCHIVA, DGATI-ARTEFACTS, DGATI-ARTEFACTS-SSD, DGATI-ARTEFACTS-EXTERNE, DGATI-ARTEFACTS-LAB'
+
+    # Scan méthode 1
+
+    - task: Maven@4
+      displayName: 'OWASP Scan'
+      env:
+        NVD_API_KEY: $(NVD_API_KEY)
+      inputs:
+        mavenPomFile: 'pom.xml'
+        options: '-DfailOnCVSS=$(DfailOnCVSS)'
+        mavenOptions: '-Xmx3072m'
+        goals: 'org.owasp:dependency-check-maven:check'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '$(jdk.version.option)'
+        jdkArchitectureOption: '$(jdk.architecture)'
+      enabled : false
+
+    # Scan méthode 2. Il faut déclarer le plugin dependency-check-maven dans la POM dans la partie build
+
+    - task: Bash@3
+      displayName: 'OWASP Scan'
+      inputs:
+        targetType: 'inline'
+        script: |
+          mvn -f ./pom.xml install org.owasp:dependency-check-maven:check -DfailOnCVSS=$(DfailOnCVSS) -Ddependency-check.failOnError=false -DskipTests
+      enabled : true
+      continueOnError: true
+        
+    # Scan méthode 3. Il faut déclarer le plugin dependency-check-maven dans la POM dans la partie build
+
+    - task: Maven@4
+      displayName: 'OWASP Scan'
+      env:
+        NVD_API_KEY: $(NVD_API_KEY)
+      inputs:
+        mavenPomFile: 'pom.xml'
+        options: '-DfailOnCVSS=$(DfailOnCVSS)'
+        mavenOptions: '-Xmx3072m'
+        goals: 'verify'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '$(jdk.version.option)'
+        jdkArchitectureOption: '$(jdk.architecture)'
+      enabled : false
+      continueOnError: false
+
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'gdu4-api/target/dependency-check-report.html'
+        ArtifactName: 'RapportOwaspDependencyCheck-API'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: 'gdu4-mvc/target/dependency-check-report.html'
+        ArtifactName: 'RapportOwaspDependencyCheck-MVC'
